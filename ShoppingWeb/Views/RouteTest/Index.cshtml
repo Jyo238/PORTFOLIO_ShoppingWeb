@@ -1,0 +1,41 @@
+﻿@*指定model的資料型態為TempProducts的List*@
+@model List<ShoppingWeb.Models.TempProducts>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    
+}
+
+<h2>商品列表</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <td>
+                編號
+            </td>
+            <td>
+                名稱
+            </td>
+            <td>
+                售價
+            </td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var pd in this.Model) /*使用foreach把所有商品列成表格元素*/
+        { 
+            
+            //抓取model內TempProducts的成員:ID、Name、Price
+            <tr>
+                <td>@pd.ID</td>
+                <td>@pd.Name</td>
+                <td>@pd.Price</td>
+            </tr>
+        }
+
+    </tbody>
+
+
+</table>
+
