@@ -46,6 +46,31 @@
        });
         }
 
+        function ClearCart()
+        {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("ClearCart","Cart")',
+                data: { }
+            })
+                .done(function (msg) {
+                    //把回傳的頁面填入li #Cart
+                    $("li#Cart").html(msg);
+                });
+        }
+
+
+        (function ($) {
+            $(document).ready(function () {
+                $('ul.dropdown-menu [data-toggle=dropdown]').on('click', function (event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    $(this).parent().siblings().removeClass('open');
+                    $(this).parent().toggleClass('open');
+                });
+            });
+        })(jQuery);
+
 
     </script>
 
@@ -68,6 +93,7 @@
                     <li>@Html.ActionLink("連絡方式", "Contact", "Home")</li>
                     <li>@Html.ActionLink("商品管理", "Index", "Product")</li>
                     <li>@Html.ActionLink("會員管理", "Index", "ManageUser")</li>
+                    <li>@Html.ActionLink("訂單管理", "Index", "ManageOrder")</li>
                     <li id="Cart">
                         @Html.Partial("_CartPartial")
                     </li>

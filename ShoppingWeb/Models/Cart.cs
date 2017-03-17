@@ -75,6 +75,7 @@ namespace ShoppingWeb.Models
                  Id = product.Id,
                  Name = product.Name,
                  Price = product.Price,
+                 DefaultImgURL=product.DefaultImageURL,
                  Quantity = 1
              };
 
@@ -99,6 +100,34 @@ namespace ShoppingWeb.Models
         }
 
 
+        public bool ClearCart()
+        {
+            this.cartItems.Clear();
+            return true;
+        }
+
+
+      
+
+        //把商品轉換成OrderDetail的list
+        public List<Models.OrderDetail> ToOrderDetailList(int orderId)
+        {
+            var result = new List<OrderDetail>();
+
+            foreach(var cartitem in this.cartItems)
+            {
+                result.Add(new OrderDetail()
+                {
+                    Name=cartitem.Name,
+                    Price=cartitem.Price,
+                    Quantity=cartitem.Quantity,
+                    OrderId=orderId
+                
+                });
+            }
+            return result;
+        }
+
         #region IEnumerator
 
         IEnumerator<CartItem> IEnumerable<CartItem>.GetEnumerator()
@@ -113,5 +142,12 @@ namespace ShoppingWeb.Models
 
         #endregion
 
+
+
     }
+
 }
+
+
+
+    

@@ -26,5 +26,7 @@ namespace ShoppingWeb.Models
                 return this.Price * this.Quantity;
             }
         }
+
+        public string DefaultImgURL { get; set; }
     }
 }

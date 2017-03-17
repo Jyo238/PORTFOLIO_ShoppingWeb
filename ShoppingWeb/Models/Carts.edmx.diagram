@@ -6,6 +6,10 @@
     <edmx:Diagrams>
       <Diagram DiagramId="3fa0b3bc417e4912bed8c21032e13555" Name="Diagram1" >
         <EntityTypeShape EntityType="CartsModel.Product" Width="1.5" PointX="3.875" PointY="2.625" />
+        <EntityTypeShape EntityType="CartsModel.Order" Width="1.5" PointX="5.875" PointY="3.125" />
+        <EntityTypeShape EntityType="CartsModel.OrderDetail" Width="1.5" PointX="7.625" PointY="3.125" />
+        <AssociationConnector Association="CartsModel.OrderOrderDetail" />
+        <EntityTypeShape EntityType="CartsModel.ProductCommet" Width="1.5" PointX="0.75" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

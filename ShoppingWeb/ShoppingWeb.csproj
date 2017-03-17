@@ -164,7 +164,9 @@
     <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\ManageOrderController.cs" />
     <Compile Include="Controllers\ManageUserController.cs" />
+    <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\TestController.cs" />
     <Compile Include="Global.asax.cs">
@@ -222,8 +224,18 @@
       <DependentUpon>Model1.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\Operation.cs" />
+    <Compile Include="Models\Order.cs">
+      <DependentUpon>Carts.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OrderDetail.cs">
+      <DependentUpon>Carts.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OrderModel\Ship.cs" />
     <Compile Include="Models\Partials\Product.cs" />
     <Compile Include="Models\Product.cs">
+      <DependentUpon>Carts.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ProductCommet.cs">
       <DependentUpon>Carts.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -327,6 +339,12 @@
     <Content Include="Views\ManageUser\Index.cshtml" />
     <Content Include="Views\ManageUser\Edit.cshtml" />
     <Content Include="Views\Shared\_CartPartial.cshtml" />
+    <Content Include="Views\Order\Index.cshtml" />
+    <Content Include="Views\ManageOrder\Index.cshtml" />
+    <Content Include="Views\ManageOrder\Details.cshtml" />
+    <Content Include="Views\Order\MyOrder.cshtml" />
+    <Content Include="Views\Order\MyOrderDetails.cshtml" />
+    <Content Include="Views\Home\Detail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -7,6 +7,13 @@
     <Schema Namespace="CartsModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
   <EntityContainer Name="CartsModelStoreContainer">
     <EntitySet Name="ProductSet" EntityType="CartsModel.Store.ProductSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="OrderSet" EntityType="CartsModel.Store.OrderSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="OrderDetailSet" EntityType="CartsModel.Store.OrderDetailSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="ProductCommets" EntityType="CartsModel.Store.ProductCommets" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="OrderOrderDetail" Association="CartsModel.Store.OrderOrderDetail">
+      <End Role="Order" EntitySet="OrderSet" />
+      <End Role="OrderDetail" EntitySet="OrderDetailSet" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="ProductSet">
     <Key>
@@ -23,12 +30,61 @@
     <Property Name="Quantity" Type="int" Nullable="false" />
     <Property Name="DefaultImageURL" Type="nvarchar(max)" Nullable="true" />
   </EntityType>
+  <EntityType Name="OrderSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserId" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="RecieverName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="RecieverPhone" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="RecieverAddress" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="OrderDetailSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="OrderId" Type="int" Nullable="false" />
+    <Property Name="Price" Type="decimal" Nullable="false" Precision="28" Scale="3" />
+    <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="100" />
+    <Property Name="Quantity" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ProductCommets">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserId" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Content" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="CreateDate" Type="datetime" Nullable="false" />
+    <Property Name="ProductId" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="OrderOrderDetail">
+    <End Role="Order" Type="CartsModel.Store.OrderSet" Multiplicity="1" />
+    <End Role="OrderDetail" Type="CartsModel.Store.OrderDetailSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Order">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="OrderDetail">
+        <PropertyRef Name="OrderId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="CartsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="CartsEntities" annotation:LazyLoadingEnabled="true" >
           <EntitySet Name="ProductSet" EntityType="CartsModel.Product" />
+          <EntitySet Name="OrderSet" EntityType="CartsModel.Order" />
+          <EntitySet Name="OrderDetailSet" EntityType="CartsModel.OrderDetail" />
+          <AssociationSet Name="OrderOrderDetail" Association="CartsModel.OrderOrderDetail">
+            <End Role="Order" EntitySet="OrderSet" />
+            <End Role="OrderDetail" EntitySet="OrderDetailSet" />
+          </AssociationSet>
+          <EntitySet Name="ProductCommets" EntityType="CartsModel.ProductCommet" />
         </EntityContainer>
         <EntityType Name="Product">
           <Key>
@@ -44,6 +100,50 @@
           <Property Name="DefaultImageId" Type="Int64" Nullable="true" />
           <Property Name="Quantity" Type="Int32" Nullable="false" />
           <Property Name="DefaultImageURL" Type="String" Nullable="true" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="OrderDetail" Relationship="CartsModel.OrderOrderDetail" FromRole="Order" ToRole="OrderDetail" />
+          <Property Name="UserId" Type="String" Nullable="false" />
+          <Property Name="RecieverName" Type="String" Nullable="false" />
+          <Property Name="RecieverPhone" Type="String" Nullable="false" />
+          <Property Name="RecieverAddress" Type="String" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OrderDetail">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Order" Relationship="CartsModel.OrderOrderDetail" FromRole="OrderDetail" ToRole="Order" />
+          <Property Name="OrderId" Type="Int32" Nullable="false" />
+          <Property Name="Price" Type="Decimal" Nullable="false" Precision="28" Scale="3" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="100" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+        </EntityType>
+        <Association Name="OrderOrderDetail">
+          <End Type="CartsModel.Order" Role="Order" Multiplicity="1" />
+          <End Type="CartsModel.OrderDetail" Role="OrderDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Order">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="OrderDetail">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="ProductCommet">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="String" Nullable="false" />
+          <Property Name="Content" Type="String" Nullable="false" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" />
+          <Property Name="ProductId" Type="Int32" Nullable="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -64,6 +164,39 @@
           <ScalarProperty Name="DefaultImageId" ColumnName="DefaultImageId" />
           <ScalarProperty Name="Quantity" ColumnName="Quantity" />
           <ScalarProperty Name="DefaultImageURL" ColumnName="DefaultImageURL" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="OrderSet">
+      <EntityTypeMapping TypeName="IsTypeOf(CartsModel.Order)">
+        <MappingFragment StoreEntitySet="OrderSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="RecieverName" ColumnName="RecieverName" />
+          <ScalarProperty Name="RecieverPhone" ColumnName="RecieverPhone" />
+          <ScalarProperty Name="RecieverAddress" ColumnName="RecieverAddress" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="OrderDetailSet">
+      <EntityTypeMapping TypeName="IsTypeOf(CartsModel.OrderDetail)">
+        <MappingFragment StoreEntitySet="OrderDetailSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+          <ScalarProperty Name="Price" ColumnName="Price" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProductCommets">
+      <EntityTypeMapping TypeName="IsTypeOf(CartsModel.ProductCommet)">
+        <MappingFragment StoreEntitySet="ProductCommets">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="Content" ColumnName="Content" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="ProductId" ColumnName="ProductId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

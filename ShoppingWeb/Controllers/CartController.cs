@@ -32,6 +32,14 @@ namespace ShoppingWeb.Controllers
                 return PartialView("_CartPartial");
         }
 
+        public ActionResult ClearCart()
+        {
+            var CurrentCart = Models.Operation.GetCurrentCart();
+            CurrentCart.ClearCart();
+            return PartialView("_CartPartial");
+        }
+
+
 
     }
 }

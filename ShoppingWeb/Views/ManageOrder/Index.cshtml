@@ -1,0 +1,66 @@
+﻿@model IEnumerable<ShoppingWeb.Models.Order>
+
+@{
+    ViewBag.Title = "Index";
+}
+<h2>訂單列表</h2>
+@using (Html.BeginForm("SearchByUserName", "ManageOrder"))
+{ 
+
+    @Html.TextBox("UserName", null, new {@class="btn-info" })
+    <input type="submit" value="搜尋" class="btn btn-default" />
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table class="table">
+<thead>
+    <tr>
+        <th>
+            購買會員編號
+        </th>
+        <th>
+            收貨人姓名
+        </th>
+        <th>
+            收貨人電話
+        </th>
+        <th>
+            收貨人地址
+        </th>
+
+    </tr>
+</thead>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            
+            <td> @Html.DisplayFor(modelItem => item.UserId)</td>
+            <td>@Html.DisplayFor(modelItem => item.RecieverName)</td>
+            <td>@Html.DisplayFor(modelItem => item.RecieverPhone)</td>
+            <td>@Html.DisplayFor(modelItem => item.RecieverAddress)</td>
+            <td>
+                @Html.ActionLink("商品明細", "Details", new { id = item.Id }
+             , new { @class = "btn btn-default" })
+            </td>
+        </tr>
+
+    }
+
+
+</table>

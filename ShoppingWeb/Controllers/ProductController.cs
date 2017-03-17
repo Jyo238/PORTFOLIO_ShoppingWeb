@@ -69,7 +69,7 @@ namespace ShoppingWeb.Controllers
                 }
                 else
                 {
-                    TempData["resultMessage"] = "資料有誤，請重新操作";
+                    TempData["ResultMessage"] = "資料有誤，請重新操作";
                     return RedirectToAction("Index");
                 }
             }
@@ -97,7 +97,7 @@ namespace ShoppingWeb.Controllers
                 result.DefaultImageURL = postback.DefaultImageURL;
                 //存檔
                 db.SaveChanges();
-                TempData["resultMessage"] = String.Format("商品{0}已編輯成功",postback.Name);
+                TempData["ResultMessage"] = String.Format("商品{0}已編輯成功",postback.Name);
                 return RedirectToAction("Index");
                 
 

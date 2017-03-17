@@ -49,8 +49,9 @@ namespace ShoppingWeb.Models
     public class LoginViewModel
     {
         [Required]
-        [Display(Name = "電子郵件")]
-        [EmailAddress]
+        [StringLength(256, ErrorMessage = "{0}的長度至少要{2}個字元", MinimumLength = 1)]
+        [Display(Name = "暱稱")]
+        //[EmailAddress]
         public string Email { get; set; }
 
         [Required]
@@ -68,10 +69,7 @@ namespace ShoppingWeb.Models
         [Required]
         [StringLength(256,ErrorMessage="{0}的長度至少要{2}個字元",MinimumLength=1)]
         [Display(Name = "暱稱")]
-        public string Name { get; set; }
-
-
-
+        public string UserName { get; set; }
 
         [Required]
         [EmailAddress]

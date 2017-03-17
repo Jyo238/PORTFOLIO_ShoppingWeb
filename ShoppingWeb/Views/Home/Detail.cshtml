@@ -1,0 +1,84 @@
+﻿@model ShoppingWeb.Models.Product
+
+@{
+    ViewBag.Title = "Details";
+    
+    
+    var commentlist=new List<ShoppingWeb.Models.ProductCommet>();
+    using(ShoppingWeb.Models.CartsEntities db = new ShoppingWeb.Models.CartsEntities())
+    {
+        commentlist = (from s in db.ProductCommets where s.ProductId == this.Model.Id select s).ToList();
+        
+    }
+    
+    
+}
+
+
+<h2>商品資訊</h2>
+
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+
+        </dt>
+
+        <dd>
+            <img src="@this.Model.DefaultImageURL" width="400" />
+        </dd>
+
+        <dt>
+            名稱
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            描述
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+        <dt>
+            售價
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+
+        <dt>
+            庫存數量
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Quantity)
+        </dd>
+    </dl>
+
+    <dl class="dl-horizontal">
+        @foreach (var comment in commentlist)
+        {
+            <dt>@comment.UserId：</dt>
+            <dd>@comment.Content  ( @comment.CreateDate )  </dd>
+        }
+    </dl>
+
+    @using (Html.BeginForm("AddComment","Home", FormMethod.Post ,new{}))
+    {
+        @Html.HiddenFor( m => m.Id )
+        @Html.TextBox("Content")
+        <input type="submit" value="留言" class="btn btn-default" />
+    }
+
+
+</div>
+<p>
+    @Html.ActionLink("回首頁", "Index" , null ,new {@class = "btn btn-default"})
+</p>

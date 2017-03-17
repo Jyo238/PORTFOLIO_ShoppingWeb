@@ -2,6 +2,13 @@
 <Schema Namespace="CartsModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
   <EntityContainer Name="CartsModelStoreContainer">
     <EntitySet Name="ProductSet" EntityType="CartsModel.Store.ProductSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="OrderSet" EntityType="CartsModel.Store.OrderSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="OrderDetailSet" EntityType="CartsModel.Store.OrderDetailSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="ProductCommets" EntityType="CartsModel.Store.ProductCommets" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="OrderOrderDetail" Association="CartsModel.Store.OrderOrderDetail">
+      <End Role="Order" EntitySet="OrderSet" />
+      <End Role="OrderDetail" EntitySet="OrderDetailSet" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="ProductSet">
     <Key>
@@ -18,4 +25,46 @@
     <Property Name="Quantity" Type="int" Nullable="false" />
     <Property Name="DefaultImageURL" Type="nvarchar(max)" Nullable="true" />
   </EntityType>
+  <EntityType Name="OrderSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserId" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="RecieverName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="RecieverPhone" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="RecieverAddress" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="OrderDetailSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="OrderId" Type="int" Nullable="false" />
+    <Property Name="Price" Type="decimal" Nullable="false" Precision="28" Scale="3" />
+    <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="100" />
+    <Property Name="Quantity" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ProductCommets">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserId" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Content" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="CreateDate" Type="datetime" Nullable="false" />
+    <Property Name="ProductId" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="OrderOrderDetail">
+    <End Role="Order" Type="CartsModel.Store.OrderSet" Multiplicity="1" />
+    <End Role="OrderDetail" Type="CartsModel.Store.OrderDetailSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Order">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="OrderDetail">
+        <PropertyRef Name="OrderId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema>

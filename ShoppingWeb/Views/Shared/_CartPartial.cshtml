@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     //取得當前購物內容
     var CurrentCart = ShoppingWeb.Models.Operation.GetCurrentCart();
 }
@@ -9,7 +8,7 @@
     <span class="caret"></span>
 </a>
 
-<ul class="dropdown-menu" role="menu" aria-labelledby="CartDropDown">
+<ul class="dropdown-menu" role="menu"  aria-labelledby="CartDropDown">
 
 
     @if (CurrentCart.Count > 0)
@@ -21,24 +20,36 @@
                 <li><a>可愛ａ橡皮擦<span>200元 x 1</span></a></li>
                 <li><a>可愛ａ屎<span>50元 x 2</span></a></li>*/
 
-            <li class="col-xs-12">
-            <span class="col-xs-10">@cartitem.Name @cartitem.Price 元 X @cartitem.Quantity</span>
-                 <span class="btn btn-danger col-xs-2" onclick="RemoveFromCart('@cartitem.Id')">
-                X
-                 </span>
+            /*
+            <li class="dropdown dropdown-submenu">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">@cartitem.Name @cartitem.Price 元 X @cartitem.Quantity</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#" onclick="RemoveFromCart('@cartitem.Id')">移除</a></li>
+                </ul>
             </li>
-        //<li><a>@cartitem.Name<span>@cartitem.Price X @cartitem.Quantity</span></a></li>
-        
+            */
+
+
+            <li class="col-xs-12"></li>
+                 <li><span class="col-xs-10">@cartitem.Name @cartitem.Price 元 X @cartitem.Quantity</span></li>
+                 <li><span class="btn btn-danger col-xs-2" onclick="RemoveFromCart('@cartitem.Id')">X</span></li>
+             
+            //<li><a>@cartitem.Name<span>@cartitem.Price X @cartitem.Quantity</span></a></li>
+
         }
-        
-    <li class="divider"></li>
-    <li><a class="btn btn-default text-center" href="#">結帳囉</a></li>
+
+        <li class="divider"></li>
+        <li><a class="btn btn-success text-center col-xs-5" href="@Url.Action("Index", "Order", new { })">結帳囉</a></li>
+        <li><a class="btn btn-danger text-center col-xs-5" onclick="ClearCart()">清空</a></li>
     }
     else
     {
         <li><a class="btn btn-default text-center" href="#">購物車內無商品</a></li>
     }
-   
 
-     
+
+
 </ul>
+
+
+
