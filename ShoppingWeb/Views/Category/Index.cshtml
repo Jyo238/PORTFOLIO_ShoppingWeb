@@ -1,0 +1,88 @@
+﻿@*指定model的資料型態為TempProducts的List*@
+@model List<ShoppingWeb.Models.Category>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+
+}
+
+
+
+@if (ViewBag.ResultMessage != null)
+{
+    @Html.Label("info", (string)ViewBag.ResultMessage, new { @class = "text-info" })
+}
+
+
+
+
+
+<div class="container">
+    <div class="row col-md-6 col-md-offset-2 custyle">
+        <h2 class="text-info">類別管理</h2>
+        <table class="table table-striped custab">
+            <thead>
+                @Html.ActionLink("新增", "Create", "Category", null, new { @class = "btn btn-primary btn-default pull-right" })
+                <tr>
+                    <th>編號</th>
+                    <th>類別</th>
+                    <th class="text-center">操作</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var pd in this.Model) /*使用foreach把所有商品列成表格元素*/
+                {
+
+                    //抓取model內TempProducts的成員:ID、Name、Price
+                    <tr>
+
+                        <td>@pd.Id</td>
+                        <td>@pd.Name</td>
+                        
+
+                        <td class="text-center">
+                            <span class="glyphicon glyphicon-edit"></span>@Html.ActionLink("編輯", "Edit", new { Id = pd.Id }, new { @class = "btn btn-info btn-default", })
+                            @using (@Html.BeginForm("Delete", "Category", FormMethod.Post, new { onsubmit = "return runScript();" }))
+                            {
+
+
+                                @Html.Hidden("Id", pd.Id)
+                            <span class="glyphicon glyphicon-remove"></span><input type="submit" value="刪除" class="btn btn-danger btn-default"/>
+
+                            }
+                        </td>
+
+
+                    </tr>
+
+
+                }
+
+
+
+            </tbody>
+
+
+
+
+        </table>
+    </div>
+</div>
+
+
+@section scripts
+{
+    <script>
+        function runScript() {
+            if (confirm("你確定要刪除嗎？")) {
+                return true;
+            }
+            else {
+                return false;
+            }
+
+        }
+    </script>
+}

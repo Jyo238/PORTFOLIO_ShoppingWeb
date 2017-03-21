@@ -7,11 +7,15 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using ShoppingWeb.Models;
+using ShoppingWeb.Models.ViewModel;
+using System.Collections.Generic;
+using System.IO;
+using System.Drawing;
 
 namespace ShoppingWeb.Controllers
 {
     [Authorize]
-    public class ManageController : Controller
+    public class ManageController : BaseController
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
@@ -63,17 +67,142 @@ namespace ShoppingWeb.Controllers
                 : message == ManageMessageId.RemovePhoneSuccess ? "已移除您的電話號碼。"
                 : "";
 
+
+            ManagerAndMemberViewModel viewModel = new ManagerAndMemberViewModel();
+            
             var userId = User.Identity.GetUserId();
-            var model = new IndexViewModel
+
+            using (Models.UserEntities db = new Models.UserEntities())
             {
-                HasPassword = HasPassword(),
-                PhoneNumber = await UserManager.GetPhoneNumberAsync(userId),
-                TwoFactor = await UserManager.GetTwoFactorEnabledAsync(userId),
-                Logins = await UserManager.GetLoginsAsync(userId),
-                BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
-            };
-            return View(model);
+              var result = (from s in db.AspNetUsers
+                              where s.Id == userId
+                              select new ManageUser
+                              {
+                               Id=s.Id,
+                               Email=s.Email,
+                               ImgUrl=s.ImgUrl,
+                               NickName=s.Name
+                              }
+                              ).FirstOrDefault();
+          
+                var model = new IndexViewModel
+                {   
+                    
+                    HasPassword = HasPassword(),
+                    PhoneNumber = await UserManager.GetPhoneNumberAsync(userId),
+                    TwoFactor = await UserManager.GetTwoFactorEnabledAsync(userId),
+                    Logins = await UserManager.GetLoginsAsync(userId),
+                    BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
+                };
+                viewModel.IndexViewModels = model;
+                viewModel.ManageUsers = result;
+                   
+
+              return View(viewModel);
+           };         
         }
+
+
+        
+        public ActionResult Edit()
+        {
+            var id = User.Identity.GetUserId();
+            using (Models.UserEntities db = new Models.UserEntities())
+            {
+                var result = (
+
+                    from s in db.AspNetUsers
+                    where s.Id == id
+                    select new Models.ManageUser
+                    {
+                        Id = s.Id,
+                        NickName = s.Name,
+                        Email = s.Email
+                    }
+
+                    ).FirstOrDefault();
+                if (result != default(Models.ManageUser))
+                {
+                    return View(result);
+                }
+            }
+            //設定錯誤訊息
+            TempData["ResultMessage"] = String.Format("使用者[{0}]不存在，請重新操作", id);
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public ActionResult Edit(Models.ManageUser postback, HttpPostedFileBase photoFile)
+        {
+            ViewBag.path = TempData["id"];
+            //檔案名
+            var fileName = "photo.jpg";
+            //路徑
+            var path = Path.Combine(Server.MapPath("~/FileUploads/" + postback.Id));
+            //路徑加檔案名
+            var pathName = Path.Combine(Server.MapPath("~/FileUploads/" + postback.Id), fileName);
+
+            using (Models.UserEntities db = new Models.UserEntities())
+            {
+                TempData["id"] = postback.Id;
+
+                if (photoFile != null)
+                {
+                    if (!isPicture(photoFile.FileName))
+                    {
+                        TempData["ErrorMessage"] = "您所上傳的檔案類型並不是圖片";
+                        return RedirectToAction("Edit");
+                    }
+
+                    if (IsImage(photoFile) == null)
+                    {
+                        TempData["ErrorMessage"] = "您所上傳的檔案內容並不是圖片";
+                        return RedirectToAction("Edit");
+                    }
+                    if (photoFile.ContentLength > 0)
+                    {
+                        //資料夾不存在的話創一個
+                        if (!Directory.Exists(path))
+                        {
+                            Directory.CreateDirectory(path);
+                        }
+                        //有此檔名的話把他刪了
+                        if (System.IO.File.Exists(pathName))
+                        {
+                            System.IO.File.Delete(pathName);
+                        }
+
+                        Image photo = Image.FromStream(photoFile.InputStream);
+                        photo.Save(pathName, System.Drawing.Imaging.ImageFormat.Jpeg);
+                        //photo.Save(@"D:\Newproject\ASP_Identity\ASP_Identity\FileUploads\" + id + @"\photo.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
+                    }
+                }
+                var result = (from s in db.AspNetUsers where s.Id == postback.Id select s).FirstOrDefault();
+                if (result != default(Models.AspNetUsers))
+                {
+                    result.Name = postback.NickName;
+                    result.Email = postback.Email;
+                    result.ImgUrl = "~/FileUploads/" + postback.Id + "/photo.jpg";
+                    db.SaveChanges();
+                    //設定成功訊息
+                    TempData["ResultMessage"] = String.Format("使用者[{0}]成功編輯", postback.NickName);
+                    return RedirectToAction("Index");
+                }
+            }
+            //設定錯誤訊息
+            TempData["ResultMessage"] = String.Format("使用者[{0}]不存在，請重新操作", postback.NickName);
+            return RedirectToAction("Index");
+        }
+
+
+
+
+
+
+
+
+
+
 
         //
         // POST: /Manage/RemoveLogin

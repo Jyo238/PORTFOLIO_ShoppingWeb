@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 03/20/2017 21:37:11
+-- Date Created: 03/22/2017 18:21:55
 -- Generated from EDMX file: D:\Newproject\ShoppingWeb\ShoppingWeb\Models\Carts.edmx
 -- --------------------------------------------------
 
@@ -33,6 +33,9 @@ IF OBJECT_ID(N'[dbo].[OrderSet]', 'U') IS NOT NULL
 GO
 IF OBJECT_ID(N'[dbo].[OrderDetailSet]', 'U') IS NOT NULL
     DROP TABLE [dbo].[OrderDetailSet];
+GO
+IF OBJECT_ID(N'[dbo].[ProductCommets]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[ProductCommets];
 GO
 
 -- --------------------------------------------------
@@ -80,7 +83,15 @@ CREATE TABLE [dbo].[ProductCommets] (
     [UserId] nvarchar(max)  NOT NULL,
     [Content] nvarchar(max)  NOT NULL,
     [CreateDate] datetime  NOT NULL,
-    [ProductId] int  NOT NULL
+    [ProductId] int  NOT NULL,
+    [Stars] int  NOT NULL
+);
+GO
+
+-- Creating table 'CategorySet'
+CREATE TABLE [dbo].[CategorySet] (
+    [Id] int IDENTITY(1,1) NOT NULL,
+    [Name] nvarchar(max)  NOT NULL
 );
 GO
 
@@ -109,6 +120,12 @@ GO
 -- Creating primary key on [Id] in table 'ProductCommets'
 ALTER TABLE [dbo].[ProductCommets]
 ADD CONSTRAINT [PK_ProductCommets]
+    PRIMARY KEY CLUSTERED ([Id] ASC);
+GO
+
+-- Creating primary key on [Id] in table 'CategorySet'
+ALTER TABLE [dbo].[CategorySet]
+ADD CONSTRAINT [PK_CategorySet]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 

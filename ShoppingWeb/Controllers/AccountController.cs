@@ -151,19 +151,43 @@ namespace ShoppingWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email,ImgUrl=model.ImgUrl,Name=model.Name };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
+                //這裡我讓他在註冊的第一個帳號為Admin
                     
+                //    var roleName = "Admin";
+                //    if (HttpContext.GetOwinContext().Get<ApplicationRoleManager>().RoleExists(roleName) == false)
+                //    { 
+                //         //角色不存在,建立角色
+                //var role = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole(roleName);
+                //await HttpContext.GetOwinContext().Get<ApplicationRoleManager>().CreateAsync(role);
+                //    }
+
+                //    //將使用者加入該角色
+                //    await UserManager.AddToRoleAsync(user.Id, roleName);
+
+                    
+
+
+
+
+                    //await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);                  
                     // 如需如何啟用帳戶確認和密碼重設的詳細資訊，請造訪 http://go.microsoft.com/fwlink/?LinkID=320771
                     // 傳送包含此連結的電子郵件
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "確認您的帳戶", "請按一下此連結確認您的帳戶 <a href=\"" + callbackUrl + "\">這裏</a>");
+                    //return RedirectToAction("Index", "Home");
+                    var code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                    await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>");
+                    ViewBag.Link = callbackUrl;
+                    return View("DisplayEmail");
 
-                    return RedirectToAction("Index", "Home");
+
+
                 }
                 AddErrors(result);
             }

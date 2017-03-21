@@ -1,4 +1,7 @@
-﻿@model IEnumerable<ShoppingWeb.Models.ManageUser>
+﻿@using PagedList
+@using PagedList.Mvc
+@*指定model的資料型態為ProductCategoryViewModel的IPagedList*@
+@model IPagedList<ShoppingWeb.Models.ManageUser>
 
 @{
     ViewBag.Title = "Index";
@@ -10,16 +13,28 @@
 @if (ViewBag != null)
 { 
     @Html.Label("info", (string)ViewBag.ResultMessage, new { @class = "text-info" })
-    @Html.Label("info", (string)ViewBag.DeleteMessage, new { @class = "text-info" })
 }
+<div>
 
+    @using (Html.BeginForm("Index", "ManageUser"))
+    {
+        <div class="form-group">
+            @Html.TextBox("q", null, new { @class = "form-control", placeholder = "Search" })
+            <button type="submit" class="btn btn-default">搜尋</button>
+        </div>
+    }
+
+</div>
 <table class="table">
 <tr>
     <th>
-        @Html.DisplayNameFor(model => model.Name)
+        暱稱
     </th>
     <th>
-        @Html.DisplayNameFor(model => model.Email)
+       Email
+    </th>
+    <th>
+        大頭貼
     </th>
     <th>操作</th>
 </tr>
@@ -28,11 +43,18 @@
 {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Name)
+            @Html.DisplayFor(modelItem => item.NickName)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Email)
         </td>
+
+        <td>
+
+            @* 預防快取，所以後方加入時間參數 *@
+            <img src="@Url.Content("~/FileUploads/" + @item.Id + "/photo.jpg" + "?" + DateTime.Now.ToString("yyyyMMddhhmmss"))" width="250" height="250" id="Avator"/>
+        </td>
+        
         <td>
             @Html.ActionLink("編輯", "Edit", new { id = item.Id }, new { @class = "btn btn-default" })
 
@@ -51,6 +73,8 @@
 }
 
 </table>
+
+@Html.PagedListPager((IPagedList)this.Model, page => Url.Action("Index", new { page }), PagedListRenderOptions.ClassicPlusFirstAndLast)
 
 @section scripts
 {

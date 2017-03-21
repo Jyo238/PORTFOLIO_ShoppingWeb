@@ -15,6 +15,7 @@ namespace ShoppingWeb.Models
         //名稱
         public string Name { get; set; }
         //價格
+
         public decimal Price { get; set; }
         //數量
         public int Quantity { get; set; }

@@ -1,5 +1,7 @@
-﻿@*指定model的資料型態為TempProducts的List*@
-@model List<ShoppingWeb.Models.Product>
+﻿@using PagedList
+@using PagedList.Mvc
+@*指定model的資料型態為ProductCategoryViewModel的IPagedList*@
+@model IPagedList<ShoppingWeb.Models.ViewModel.ProductCategoryViewModel>
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -8,13 +10,34 @@
 }
 
 <h2>商品列表</h2>
+<tr>
+    <td>
+        @Html.ActionLink("新增商品", "Create",null,null, new { @class = "btn btn-default" })
+    </td>
+    <td>
+        @Html.ActionLink("類別管理", "Index", "Category",null, new { @class = "btn btn-default" })
+    </td>
+    
+    
+</tr>
 
-@Html.ActionLink("新增", "Create", "Index", new { @class = "btn btn-default" })
-    @if (ViewBag.ResultMessage != null)
+    
+@if (ViewBag.ResultMessage != null)
     {
         @Html.Label("info", (string)ViewBag.ResultMessage, new { @class = "text-info" })
     }
     
+<div>
+
+    @using (Html.BeginForm("Index", "Product"))
+    {
+        <div class="form-group">
+            @Html.TextBox("q", null, new { @class = "form-control", placeholder = "Search" })
+            <button type="submit" class="btn btn-default">搜尋</button>
+        </div>
+    }
+
+</div>
     
   
     
@@ -42,56 +65,46 @@
                 描述
             </td>
             <td>
+                上傳日期
+            </td>
+            <td>
                 售價
             </td>
             <td>
                 庫存
             </td>
+            <td>類別</td>
         </tr>
     </thead>
     <tbody>
     @foreach (var pd in this.Model) /*使用foreach把所有商品列成表格元素*/
-        {
-   
-            //抓取model內TempProducts的成員:ID、Name、Price
+    {  
             <tr>
                 <td>
-
-                    @Html.ActionLink("編輯", "Edit", new { Id = pd.Id },new { @class = "btn btn-default"})
+                
+                    @Html.ActionLink("編輯", "Edit", new { Id = pd.Id }, new { @class = "btn btn-default" })
 
                     @using (@Html.BeginForm("Delete", "Product", FormMethod.Post, new { onsubmit = "return runScript();" }))
                     {
-
-
-                        @Html.Hidden("Id", pd.Id)
+                       @Html.Hidden("Id", pd.Id)
                         <input type="submit" value="刪除" class="btn btn-default" />
-
-                    }
-
-
+                    }                   
                 </td>
                 <td><img src="@pd.DefaultImageURL" width = "50" height = "50" /></td>
                 <td>@pd.Id</td>
                 <td>@pd.Name</td>
                 <td>@pd.Description</td>
+                <td>@String.Format("{0:yyyy\\/MM\\/dd}", pd.PublishDate)</td>
                 <td>@pd.Price</td>
                 <td>@pd.Quantity</td>
-            </tr>
-        
-        
-        }
-        
-
-        
+                <td>@pd.CategoryName</td>
+            </tr>      
+    }
+             
     </tbody>
-   
-
-
-
-
-
+  
 </table>
-
+@Html.PagedListPager((IPagedList)this.Model, page => Url.Action("Index", new { page }), PagedListRenderOptions.ClassicPlusFirstAndLast)
 @section scripts
 {
     <script>
@@ -106,3 +119,5 @@
         }
     </script>
 }
+
+

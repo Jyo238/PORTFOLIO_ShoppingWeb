@@ -1,49 +1,113 @@
 ﻿@using Microsoft.AspNet.Identity
-@model List<ShoppingWeb.Models.Product>
+@using PagedList
+@using PagedList.Mvc
+@model IPagedList<ShoppingWeb.Models.Product>
 @{
     ViewBag.Title = "購物首頁";
     var UserId = User.Identity.GetUserId();
     var UserName = User.Identity.Name;
 }
-
 <style>
     .ProductImg {
-        height : 300px; 
+        height: 300px;
     }
-
 </style>
 
-<div class="jumbotron">
-    <h2>新兵入伍生活用品店 - 什麼都要買，什麼都用不到</h2>
-    <h6><span></span> @Html.ActionLink("關於網站", "About", new { }, new { @class = "btn btn-primary btn-lg" })</h6>
-@if (ViewBag.ResultMessage != null)
-{
-    @Html.Label("info", (string)ViewBag.ResultMessage, new { @class = "text-info" })
-}
 
-</div>
+<body>
 
+    <div id="wrapper">
+        <!-- Sidebar -->
+                @*@{Html.RenderAction("_CategoryMenu", "Category");}*@
 
-<div class="row">
-    @foreach (var Product in this.Model)
-    { 
-        <div class="col-sm-6 col-md-4">
-            <div class="thumbnail">
-                <img class="ProductImg" src="@Product.DefaultImageURL" alt="商品圖片" />
-                <div class="caption">
-                    <h3>@Product.Name</h3>
-                    <p>@Product.Description</p>
-                    <p>售價：@Product.Price</p>
-                    <p>庫存：@Product.Quantity</p>
-                    <p>
-                        <a onclick="AddToCart('@Product.Id')" href="javascript:void{0};" class="btn btn-primary" role="button" >加入購物車</a>
-                        <a href="@Url.Action("Detail", new { id = Product.Id })" class="btn btn-default" role="button">詳細資訊</a>
-                    </p>
+            <div id="page-content-wrapper">
+                <div class="container-fluid">
+
+                    <div id="banner">
+                        <img src="https://templated.co/items/demos/waterdrop/images/header-image-bg.jpg" class="img-responsive" alt="">
+                        <br />
+                        <div class="jumbotron">
+                            <h2>生活用品店 - 什麼都要買，什麼都用不到</h2>                         
+                            <div>
+
+                                @using (Html.BeginForm("Index", "Home"))
+                                {
+
+                                    <form class="navbar-form navbar-left">
+                                    <div class="form-group">
+                                        @Html.TextBox("q", null, new { @class = "form-control", placeholder = "Search" })
+                                    </div>                                  
+                                    <input type="submit" value="搜尋" class="btn btn-default" />
+                                        </form>
+                                }
+                                @*<h6><span></span> <a href="#menu-toggle" class="btn btn-primary btn-lg" id="menu-toggle">開始血拚</a></h6>*@
+                              
+                            </div>
+
+                            @if (ViewBag.ResultMessage != null)
+                            {
+                                <h2>
+                                    您搜尋的結果"@ViewBag.ResultMessage"共有"@Model.Count"個相似的結果
+                                </h2>
+                               
+                            }
+
+                        </div>
+                    </div>
+
+                        @foreach (var Product in Model)
+                        {
+                            <!--<div class="col-xs-12 col-sm-6 col-md-3 wrapper">-->
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6 rwrapper">
+                                <div class="rlisting">
+                                    <div class="col-lg-12 nopad">
+                                        <a href="@Url.Action("Detail", new { id = Product.Id })"><img class="ProductImg" src="@Product.DefaultImageURL" alt="商品圖片" width="250" height="250" /></a>
+                                    </div>
+                                    <div class="col-lg-12 nopad">
+                                        <h3>&nbsp;&nbsp;@Product.Name</h3>
+                                        <p>描述：@Product.Description</p>
+                                        <p>售價：@Product.Price</p>
+                                        <p>庫存：@Product.Quantity</p>
+                                        <p>
+                                            <a onclick="AddToCart('@Product.Id')" href="javascript: void(0)" class="btn btn-primary" role="button">加入購物車</a>
+                                            <a href="@Url.Action("Detail", new { id = Product.Id })" class="btn btn-default" role="button">詳細資訊</a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        }
+  
+                    </div>
+                @Html.PagedListPager((IPagedList)this.Model, page => Url.Action("Index", new { page }), PagedListRenderOptions.ClassicPlusFirstAndLast)
                 </div>
             </div>
 
+    @*<!--
+    <!-- jQuery -->
+    <script src="js/jquery.js"></script>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+    <!-- Menu Toggle Script -->
 
-        </div>
-    }
 
-</div>
+
+    <script>
+        $("#menu-toggle").click(function (e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+        });
+    </script>
+    *@
+
+
+</body>
+
+
+
+
+
+
+
+
+

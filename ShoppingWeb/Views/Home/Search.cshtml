@@ -1,0 +1,36 @@
+﻿@model List<ShoppingWeb.Models.Product>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+
+}
+
+<h2>
+    您搜尋的結果"@ViewBag.ResultMessage"共有"@Model.Count"個相似的結果
+</h2>
+
+                        @foreach (var Product in this.Model)
+                        {
+                            <!--<div class="col-xs-12 col-sm-6 col-md-3 wrapper">-->
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-6 rwrapper">
+                                <div class="rlisting">
+                                    <div class="col-lg-12 nopad">
+                                        <a href="@Url.Action("Detail", new { id = Product.Id })"><img class="ProductImg" src="@Product.DefaultImageURL" alt="商品圖片" width="250" height="250" /></a>
+                                    </div>
+                                    <div class="col-lg-12 nopad">
+                                        <h3>&nbsp;&nbsp;@Product.Name</h3>
+                                        <p>描述：@Product.Description</p>
+                                        <p>售價：@Product.Price</p>
+                                        <p>庫存：@Product.Quantity</p>
+                                        <p>
+                                            <a onclick="AddToCart('@Product.Id')" href="javascript:void{0};" class="btn btn-primary" role="button">加入購物車</a>
+                                            <!--<a href="@Url.Action("Detail", new { id = Product.Id })" class="btn btn-default" role="button">詳細資訊</a>-->
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        }
+
+

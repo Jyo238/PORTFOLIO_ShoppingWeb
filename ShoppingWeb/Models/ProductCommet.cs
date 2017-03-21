@@ -19,5 +19,7 @@ namespace ShoppingWeb.Models
         public string Content { get; set; }
         public System.DateTime CreateDate { get; set; }
         public int ProductId { get; set; }
+        public int Stars { get; set; }
+        public string ImgUrl { get; set; }
     }
 }

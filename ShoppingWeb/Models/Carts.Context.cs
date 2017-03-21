@@ -29,5 +29,6 @@ namespace ShoppingWeb.Models
         public virtual DbSet<Order> OrderSet { get; set; }
         public virtual DbSet<OrderDetail> OrderDetailSet { get; set; }
         public virtual DbSet<ProductCommet> ProductCommets { get; set; }
+        public virtual DbSet<Category> CategorySet { get; set; }
     }
 }

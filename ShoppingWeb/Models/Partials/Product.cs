@@ -41,7 +41,12 @@ namespace ShoppingWeb.Models
              [Required]
              [Range(0, 10000, ErrorMessage = "{0}必須介於{1}到{2}之間")]
             public int Quantity { get; set; }
+
+            
+
+
         }
-        
+        public virtual Category Category { get; set; }
+
     }
 }

@@ -72,3 +72,11 @@ D:\Newproject\ShoppingWeb\ShoppingWeb\bin\zh-Hant\Microsoft.Owin.Security.Micros
 D:\Newproject\ShoppingWeb\ShoppingWeb\obj\Debug\ShoppingWeb.csprojResolveAssemblyReference.cache
 D:\Newproject\ShoppingWeb\ShoppingWeb\obj\Debug\ShoppingWeb.dll
 D:\Newproject\ShoppingWeb\ShoppingWeb\obj\Debug\ShoppingWeb.pdb
+D:\Newproject\ShoppingWeb\ShoppingWeb\bin\PagedList.dll
+D:\Newproject\ShoppingWeb\ShoppingWeb\bin\PagedList.Mvc.dll
+D:\Newproject\ShoppingWeb\ShoppingWeb\bin\PagedList.xml
+D:\Newproject\ShoppingWeb\ShoppingWeb\bin\PagedList.Mvc.xml
+D:\Newproject\ShoppingWeb\ShoppingWeb\obj\Debug\ShoppingWeb.Migrations.InitialCreate.resources
+D:\Newproject\ShoppingWeb\ShoppingWeb\obj\Debug\ShoppingWeb.csproj.GenerateResource.Cache
+D:\Newproject\ShoppingWeb\ShoppingWeb\obj\Debug\ShoppingWeb.Migrations.Init.resources
+D:\Newproject\ShoppingWeb\ShoppingWeb\obj\Debug\ShoppingWeb.Migrations.Init1.resources

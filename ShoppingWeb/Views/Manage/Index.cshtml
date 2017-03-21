@@ -1,19 +1,53 @@
-﻿@model ShoppingWeb.Models.IndexViewModel
+﻿@*@model ShoppingWeb.Models.IndexViewModel*@
+@model ShoppingWeb.Models.ViewModel.ManagerAndMemberViewModel
 @{
-    ViewBag.Title = "管理";
+    ViewBag.Title = "會員管理";
+    var userId = User.Identity.Name;
+
 }
 
 <h2>@ViewBag.Title.</h2>
 
 <p class="text-success">@ViewBag.StatusMessage</p>
+
+
+
+    
+
+
+
+
+
+
 <div>
-    <h4>變更帳戶設定</h4>
+   
+
+
+
+    <h3>您的個人資料</h3>
+
+    <div class="display-field">
+       
+        <img class="fb-image-profile thumbnail" src="@Url.Content(@Model.ManageUsers.ImgUrl+"?" + DateTime.Now.ToString("yyyyMMddhhmmss"))" width=" 250" height="250" id="@Model.ManageUsers.ImgUrl"/>
+    </div>
+
+   
+    @Html.ActionLink("編輯", "Edit", null,  new { @class = "btn btn-default" })
+    <script type="javascript">window.location=window.location</script>
     <hr />
     <dl class="dl-horizontal">
+        @*<dt><img src="@Url.Content(@Model.ManageUsers.ImgUrl)" width="50" height="50" /></dt>*@
+
+        <dt>@Html.DisplayNameFor(model => Model.ManageUsers.NickName):</dt>
+        <dd>@Html.DisplayFor(model => Model.ManageUsers.NickName)</dd>
+
+        <dt>@Html.DisplayNameFor(model => Model.ManageUsers.Email):</dt>
+        <dd>@Html.DisplayFor(model => Model.ManageUsers.Email)</dd>
+
         <dt>密碼:</dt>
         <dd>
             [
-            @if (Model.HasPassword)
+            @if (Model.IndexViewModels.HasPassword)
             {
                 @Html.ActionLink("變更密碼", "ChangePassword")
             }
@@ -25,18 +59,18 @@
         </dd>
         <dt>外部登入:</dt>
         <dd>
-            @Model.Logins.Count [
+            @Model.IndexViewModels.Logins.Count [
             @Html.ActionLink("管理", "ManageLogins") ]
         </dd>
         @*
             電話號碼可以當做雙因素驗證系統中的第二個驗證因素。
-             
+
              請參閱<a href="http://go.microsoft.com/fwlink/?LinkId=403804">此文章</a>
                 以了解設定此 ASP.NET 應用程式以支援使用 SMS 進行雙因素驗證的詳細資料。
-             
+
             雙因素驗證設定完成之後，請取消註解以下區塊
         *@
-        @*  
+        @*
             <dt>電話號碼:</dt>
             <dd>
                 @(Model.PhoneNumber ?? "None") [
@@ -53,12 +87,12 @@
                 ]
             </dd>
         *@
-        <dt>雙因素驗證:</dt>
+        @*<dt>雙因素驗證:</dt>
         <dd>
             <p>
                 並未設定雙因素驗證提供者。請參閱<a href="http://go.microsoft.com/fwlink/?LinkId=403804">此文章</a>
                 以了解設定此 ASP.NET 應用程式以支援雙因素驗證的詳細資料。
-            </p>
+            </p>*@
             @*@if (Model.TwoFactor)
                 {
                     using (Html.BeginForm("DisableTwoFactorAuthentication", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
@@ -79,6 +113,10 @@
                         </text>
                     }
                 }*@
-        </dd>
+        @*</dd>*@
+
     </dl>
+
 </div>
+
+

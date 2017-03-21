@@ -50,7 +50,7 @@ namespace ShoppingWeb.Models
     {
         [Required]
         [StringLength(256, ErrorMessage = "{0}的長度至少要{2}個字元", MinimumLength = 1)]
-        [Display(Name = "暱稱")]
+        [Display(Name = "Email")]
         //[EmailAddress]
         public string Email { get; set; }
 
@@ -69,7 +69,10 @@ namespace ShoppingWeb.Models
         [Required]
         [StringLength(256,ErrorMessage="{0}的長度至少要{2}個字元",MinimumLength=1)]
         [Display(Name = "暱稱")]
-        public string UserName { get; set; }
+        public string Name { get; set; }
+
+
+        public string ImgUrl { get; set; }
 
         [Required]
         [EmailAddress]

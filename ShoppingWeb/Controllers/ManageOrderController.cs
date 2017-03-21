@@ -7,6 +7,7 @@ using System.Web.Mvc;
 
 namespace ShoppingWeb.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ManageOrderController : Controller
     {
         // GET: ManageOrder

@@ -26,7 +26,7 @@ namespace ShoppingWeb.Models
                 decimal totalamount = 0.0m;
                 foreach (var cartItem in this.cartItems)
                 {
-                    totalamount = totalamount + cartItem.Amount;
+                    totalamount = Math.Round( totalamount + cartItem.Amount,0);
                 }
                 return totalamount;
             }

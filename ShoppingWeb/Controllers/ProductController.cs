@@ -4,29 +4,114 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using ShoppingWeb.Models;
+using PagedList;
+using PagedList.Mvc;
+using System.Web.Security;
+using ShoppingWeb.Models.ViewModel;
 namespace ShoppingWeb.Controllers
 {
     public class ProductController : Controller
     {
-        //透過Entity Framework 讀取Carts資料表內新增的三筆資料
+        
         // GET: Product
-        public ActionResult Index()
+        public ActionResult Index(string q,int page = 1,int pagesize= 6)
         {
             //List實體化
-            List<Models.Product> result = new List<Models.Product>();
+           //List<Models.ViewModel.ProductCategoryViewModel> result = new List<Models.ViewModel.ProductCategoryViewModel>();
+
             //接收轉至的成功訊息
             ViewBag.ResultMessage = TempData["ResultMessage"];
-
-            using(Models.CartsEntities db = new Models.CartsEntities())
+            //搜尋欄是否為空或空白
+            if (string.IsNullOrWhiteSpace(q))
             {
-                result = (from s in db.ProductSet select s).ToList();    
+                using (Models.CartsEntities db = new Models.CartsEntities())
+                {
+
+                    //db.Product和db.Category做inner join，select new Models.ViewModel.ProductCategoryViewModel
+                   var result = (from s in db.ProductSet
+                              join o in db.CategorySet on s.CategoryId equals o.Id
+                              orderby s.Id
+                              select new  ProductCategoryViewModel
+                    {
+                        Id = s.Id,
+                        Name = s.Name,
+                        CategoryId = o.Id,
+                        CategoryName = o.Name,
+                        DefaultImageId = s.DefaultImageId,
+                        DefaultImageURL = s.DefaultImageURL,
+                        Status = s.Status,
+                        Description = s.Description,
+                        Price = s.Price,
+                        PublishDate = s.PublishDate,
+                        Quantity = s.Quantity
+                    });
+
+                   return View(result.ToPagedList(page, pagesize));
+                }
+
             }
-            
-            return View(result);
+            else
+            {
+                using (Models.CartsEntities db = new Models.CartsEntities())
+                {
+                    //db.Product和db.Category做inner join，select new Models.ViewModel.ProductCategoryViewModel
+                 var result = (from s in db.ProductSet
+                              join o in db.CategorySet on s.CategoryId equals o.Id
+                              where s.Name.Contains(q)
+                              select new Models.ViewModel.ProductCategoryViewModel
+                              {
+                                  Id = s.Id,
+                                  Name = s.Name,
+                                  CategoryId = o.Id,
+                                  CategoryName = o.Name,
+                                  DefaultImageId = s.DefaultImageId,
+                                  DefaultImageURL = s.DefaultImageURL,
+                                  Status = s.Status,
+                                  Description = s.Description,
+                                  Price = s.Price,
+                                  PublishDate = s.PublishDate,
+                                  Quantity = s.Quantity
+                              }); 
+
+                   return View(result.ToPagedList(page, pagesize));
+                }
+                
+            }
+      
         }
+
+
+        public ActionResult Browse(int Category,int page = 1,int pagesize= 6)
+        {
+            //List實體化
+            //List<Models.Product> result = new List<Models.Product>();
+            //接收轉至的成功訊息
+            //ViewBag.ResultMessage = TempData["ResultMessage"];
+
+            using (Models.CartsEntities db = new Models.CartsEntities())
+            {
+                var result = (from s in db.ProductSet where s.CategoryId == Category orderby s.Id  select s);
+
+                return View(result.ToPagedList(page, pagesize));
+            }
+
+
+        }
+
+
+
 
         public ActionResult Create()
         {
+            using (Models.CartsEntities db = new Models.CartsEntities())
+            {
+            var CN = (from o in db.CategorySet select o).ToList();
+            ViewBag.CategoryId = new SelectList(CN, "Id", "Name");
+                }
+           
+
+
+
             return View();
         }
         //只有使用Post方法才可進入
@@ -44,6 +129,8 @@ namespace ShoppingWeb.Controllers
                     db.SaveChanges();
                     //成功訊息
                     TempData["ResultMessage"] = String.Format("商品{0}成功建立", postback.Name);
+                    var CN = (from o in db.CategorySet select o).ToList();
+                    ViewBag.CategoryId = new SelectList(CN, "Id", "Name");
                     //轉至Product/Index
                     return RedirectToAction("Index");
                 }
@@ -63,8 +150,14 @@ namespace ShoppingWeb.Controllers
             {
                 //ProductSet內的Id = 輸入的Id 的值
                 var result = (from s in db.ProductSet where s.Id == Id select s).FirstOrDefault();
+                //抓Category的資料傳到Viewbag做DropDownList
+                int CId = (from s in db.ProductSet where s.Id == Id select s.CategoryId).FirstOrDefault();
+                var CN = (from o in db.CategorySet select o).ToList();
+                ViewBag.CategoryId = new SelectList(CN, "Id", "Name", CId);
+
                 if (result != default(Product)) //如果Result有抓到資料
                 {
+
                     return View(result); //回傳Result的View
                 }
                 else
@@ -82,7 +175,11 @@ namespace ShoppingWeb.Controllers
            {
             using(CartsEntities db = new CartsEntities())
             {
-                
+
+                //抓Category的資料傳到Viewbag做DropDownList
+                int CId = (from s in db.ProductSet where s.Id == postback.Id select s.CategoryId).FirstOrDefault();
+                var CN = (from o in db.CategorySet select o).ToList();
+                ViewBag.CategoryId = new SelectList(CN, "Id", "Name", CId);
                 //ProductSet內的Id = postback的Id 的值
                 var result = (from s in db.ProductSet where s.Id == postback.Id select s).FirstOrDefault();
                 //儲存使用者變更資料
@@ -91,18 +188,21 @@ namespace ShoppingWeb.Controllers
                 result.PublishDate=postback.PublishDate;
                 result.Quantity=postback.Quantity;
                 result.Status=postback.Status;
-                result.CategoryId = postback.CategoryId;
+                result.CategoryId =postback.CategoryId ;
                 result.DefaultImageId = postback.DefaultImageId;
                 result.Description = postback.Description;
                 result.DefaultImageURL = postback.DefaultImageURL;
+                //ViewBag.CategoryId = new SelectList(db.CategorySet, "Id", "Name", (db.ProductSet.Find(postback.Id).CategoryId));
                 //存檔
                 db.SaveChanges();
                 TempData["ResultMessage"] = String.Format("商品{0}已編輯成功",postback.Name);
                 return RedirectToAction("Index");
-                
+
 
             }
+
            }
+
            else
            {
             return View(postback);
@@ -110,8 +210,8 @@ namespace ShoppingWeb.Controllers
 
         }
 
-       
 
+    
 
 
         [HttpPost, ActionName("Delete")] //刪除方法為POST
