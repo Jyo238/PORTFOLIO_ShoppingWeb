@@ -1,0 +1,287 @@
+﻿@using PagedList.Mvc;
+@using PagedList;
+@model  ShoppingWeb.Models.ViewModel.ProductProductCommetViewModel
+          
+
+@{
+    ViewBag.Title = "Details";
+
+    string[] btnarray = { "progress-bar progress-bar-danger", "progress-bar progress-bar-danger", "progress-bar progress-bar-warning", "progress-bar progress-bar-info", "progress-bar progress-bar-primary", "progress-bar progress-bar-success" };
+
+    
+    
+}
+
+<h2>商品資訊</h2>
+
+<div>
+    <div class="item-container">
+        <div class="container">
+
+            <div class="col-md-7">
+                <dl class="dl-horizontal">
+                    <dt>
+
+                    </dt>
+
+                    <dd>
+                        <img src="@this.Model.Products.DefaultImageURL" width="400" />
+                    </dd>
+
+                    <dt>
+                        名稱
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Products.Name)
+                    </dd>
+
+                    <dt>
+                        描述
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Products.Description)
+                    </dd>
+
+                    <dt>
+                        售價
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Products.Price)
+                    </dd>
+
+                    <dt>
+                        庫存
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Products.Quantity)
+                    </dd>
+
+                </dl>
+                <div class="btn-group cart">
+                    <button type="button" class="btn btn-success" onclick="AddToCart('@Model.Products.Id')" href="javascript: void(0)">
+                        Add to cart
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    @*<hr />
+    <dl class="dl-horizontal">
+        <dt>
+
+        </dt>
+
+        <dd>
+            <img src="@this.Model.Products.DefaultImageURL" width="400" />
+        </dd>
+
+        <dt>
+            名稱
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Products.Name)
+        </dd>
+
+        <dt>
+            描述
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Products.Description)
+        </dd>
+
+        <dt>
+            售價
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Products.Price)
+        </dd>
+
+        <dt>
+            庫存數量
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Products.Quantity)
+        </dd>
+
+    </dl>*@
+
+    @*<a onclick="AddToCart('@Model.Products.Id')" href="javascript: void(0)" class="btn btn-primary right" role="button">加入購物車</a>*@
+
+
+
+<!------------------------------評分------------------------------------------>
+    <!-- Fixed navbar -->
+    <br />
+    <div class="container">
+
+        <div class="row">
+
+            <div class="col-sm-3">
+                <div class="rating-block">
+
+                    <h4>Average user rating</h4>
+                    <h2 class="bold padding-bottom-7">@Model.starrating <small>/ @Model.starmax</small></h2>
+
+                    @for (int i = 0; i < Math.Round(Model.starrating, 0); i++)
+                    {
+                        <button type="button" class="btn btn-warning btn-xs" aria-label="Left Align">
+                            <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                        </button>
+                    }
+                    @if (Math.Round(Model.starrating, 0) < 5)
+                    {
+                        for (int i = 5; i > Math.Round(Model.starrating, 0); i--)
+                        {
+                            <button type="button" class="btn btn-default btn-grey btn-xs" aria-label="Left Align">
+                                <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                            </button>
+                        }
+                    }
+                </div>
+            </div>
+
+
+            <div class="col-sm-3">
+
+                <h4>Rating breakdown</h4>
+                
+                @foreach (var stars in Model.staritem)
+                {
+                    string level = Model.starmax * 20 + "%";
+                   
+                    
+                    <div class="pull-left">
+                        <div class="pull-left" style="width:35px; line-height:1;">
+                            <div style="height:9px; margin:5px 0;">@Model.starmax <span class="glyphicon glyphicon-star"></span></div>
+                        </div>
+                        <div class="pull-left" style="width:180px;">
+                            <div class="progress" style="height:9px; margin:8px 0;">
+                                <div class="@btnarray[Model.starmax]" role="progressbar" aria-valuenow="@Model.starmax" aria-valuemin="0" aria-valuemax="5" style="width: @level ">
+                                    <span class="sr-only">80% Complete (danger)</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pull-right" style="margin-left:10px;">@stars</div>
+                    </div>
+                    
+                    Model.starmax -= 1;
+                    
+                }
+              
+            </div>           
+        </div>
+
+        <div class="row">
+            <div class="col-sm-7">
+                <hr />
+                <div class="review-block">
+
+@foreach (var comment in Model.ProductCommet)
+{ 
+    
+                    <div class="row">
+                        <div class="col-sm-3">
+                            @if (comment.ImgUrl == null)
+                            {
+                                <img src="http://dummyimage.com/60x60/666/ffffff&text=No+Image" class="img-rounded">
+                            }
+                            else 
+                            { 
+                            <img src="@Url.Content(comment.ImgUrl+"?" + DateTime.Now.ToString("yyyyMMddhhmmss"))" class="img-rounded" width="60" height="60">
+                            }
+                            <div class="review-block-name"><a href="#">@comment.UserId</a></div>
+                            <div class="review-block-date">@comment.CreateDate</div>
+                        </div>
+                        <div class="col-sm-9">
+
+                            <div class="review-block-rate">
+                                @for (int i = 0; i < @comment.Stars; i++)
+                                {
+                                    <button type="button" class="btn btn-warning btn-xs" aria-label="Left Align">
+                                        <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                                    </button>
+                                }
+                                @if (@comment.Stars < 5)
+                                { 
+                                    for (int i = 5; i > @comment.Stars ; i--)
+                                    {
+                                        <button type="button" class="btn btn-default btn-grey btn-xs" aria-label="Left Align">
+                                            <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                                        </button>
+                                    }
+                                }
+
+                     </div>
+                            <div class="review-block-description">@comment.Content </div>
+                        </div>
+                    </div>
+                    <hr />
+}    
+                </div>
+            </div>
+        </div>
+        @Html.PagedListPager((IPagedList)this.Model.ProductCommet, page => Url.Action("Detail", new { id= Model.Products.Id ,page }), PagedListRenderOptions.ClassicPlusFirstAndLast)
+    </div> 
+    <!-- /container -->
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    @*<!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="js/ie10-viewport-bug-workaround.js"></script>*@
+
+
+<!---------------------------------------------------留言---------------------------------------------------->
+    <script src="~/Scripts/contact.js"></script>
+    <div class="container">
+        <div class="row" style="margin-top:40px;">
+            <div class="col-md-6">
+                <div class="well well-sm">
+                    <div class="text-right">
+                        <a class="btn btn-success btn-green" href="#reviews-anchor" id="open-review-box">Leave a Review</a>
+                    </div>
+
+                    @using (Html.BeginForm("AddComment", "Home", FormMethod.Post, new { }))
+                    {
+                    <input id="id" name="id" type="hidden" value="@Model.Products.Id">
+                        @*@Html.HiddenFor(id => Model.Products.Id)*@
+                    <div class="row" id="post-review-box" style="display:none;">
+                        <div class="col-md-12">
+                            <form method="post" accept-charset="UTF-8" action="">
+                                <input id="ratings-hidden" name="rating" type="hidden" value="0">
+                                @*<input id="rating" name="rating" type="hidden" value="0">*@
+                                <textarea class="form-control animated" cols="50" id="new-review" name="Content" placeholder="Enter your review here..." rows="5"></textarea>
+                                @*<textarea class="form-control animated" cols="50" id="Content" name="Content" placeholder="Enter your review here..." rows="5"></textarea>*@
+                                <div class="text-right">
+                                    <div class="stars starrr" data-rating="0"></div>
+                                    <a class="btn btn-danger btn-sm" href="#" id="close-review-box" style="display:none; margin-right: 10px;">
+                                        <span class="glyphicon glyphicon-remove"></span>Cancel
+                                    </a>
+                                    <input type="submit" value="留言" class="btn btn-success btn-lg" />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    }
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<p>
+    @Html.ActionLink("回首頁", "Index" , null ,new {@class = "btn btn-default"})
+</p>

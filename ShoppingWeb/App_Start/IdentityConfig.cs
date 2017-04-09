@@ -11,6 +11,9 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using ShoppingWeb.Models;
+using System.Net.Mail;
+using System.Web.Helpers;
+using System.Net;
 
 namespace ShoppingWeb
 {
@@ -18,9 +21,19 @@ namespace ShoppingWeb
     {
         public Task SendAsync(IdentityMessage message)
         {
-            // 將您的電子郵件服務外掛到這裡以傳送電子郵件。
-            return Task.FromResult(0);
-        }
+                        // 將您的電子郵件服務外掛到這裡以傳送電子郵件。
+
+            SmtpClient client = new SmtpClient();
+            client.Port = 587;
+            client.Host = "smtp.gmail.com";
+            client.EnableSsl = true;
+            //client.Timeout = 10000;
+            client.DeliveryMethod = SmtpDeliveryMethod.Network;
+            client.UseDefaultCredentials = false;
+            client.Credentials = new NetworkCredential("a7032181@gmail.com", "h1122330");
+
+            return client.SendMailAsync("a7032181@gmail.com", message.Destination, message.Subject, message.Body);
+            }
     }
 
     public class SmsService : IIdentityMessageService

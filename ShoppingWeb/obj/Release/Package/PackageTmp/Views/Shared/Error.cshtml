@@ -1,0 +1,21 @@
+﻿@model System.Web.Mvc.HandleErrorInfo
+
+@{
+    ViewBag.Title = "錯誤";
+}
+
+<div class="error">
+   
+    <h3 class="font-bold">Oops！網站好像出了點問題..</h3>
+    <div class="error-desc">
+       很抱歉，這個頁面可能找不到或者被刪除囉！<br />
+        試著重新整理或者按下回到首頁吧！
+        <div>
+            <a class=" login-detail-panel-button btn" href="@Url.Action("Index","Home")">
+                <i class="fa fa-arrow-left"></i>
+                回到首頁
+            </a>
+        </div>
+    </div>
+</div>
+

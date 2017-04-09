@@ -59,11 +59,11 @@ namespace ShoppingWeb
             //   appId: "",
             //   appSecret: "");
 
-            //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
-            //{
-            //    ClientId = "",
-            //    ClientSecret = ""
-            //});
+            app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+            {
+                ClientId = "208106339541-7f46ggjqviql82qjrn45rf48in48ndj6.apps.googleusercontent.com",
+                ClientSecret = "fGFpUI_FlUfq6Mbk_rV6fYRJ"
+            });
         }
     }
 }

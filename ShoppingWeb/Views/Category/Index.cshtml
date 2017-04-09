@@ -23,7 +23,7 @@
         <h2 class="text-info">類別管理</h2>
         <table class="table table-striped custab">
             <thead>
-                @Html.ActionLink("新增", "Create", "Category", null, new { @class = "btn btn-primary btn-default pull-right" })
+                @Html.ActionLink("新增", "Create", "Category", null, new { @class = "btn btn-success btn-default pull-right" })
                 <tr>
                     <th>編號</th>
                     <th>類別</th>
@@ -43,13 +43,13 @@
                         
 
                         <td class="text-center">
-                            <span class="glyphicon glyphicon-edit"></span>@Html.ActionLink("編輯", "Edit", new { Id = pd.Id }, new { @class = "btn btn-info btn-default", })
+                           @Html.ActionLink("編輯", "Edit", new { Id = pd.Id }, new { @class = "btn btn-info btn-default", })
                             @using (@Html.BeginForm("Delete", "Category", FormMethod.Post, new { onsubmit = "return runScript();" }))
                             {
 
 
                                 @Html.Hidden("Id", pd.Id)
-                            <span class="glyphicon glyphicon-remove"></span><input type="submit" value="刪除" class="btn btn-danger btn-default"/>
+                           <input type="submit" value="刪除" class="btn btn-danger btn-default"/>
 
                             }
                         </td>

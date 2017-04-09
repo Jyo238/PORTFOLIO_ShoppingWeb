@@ -1,0 +1,24 @@
+﻿@{
+    ViewBag.Title = "感謝您的購買";
+}
+<h2>@ViewBag.Title.</h2>
+<p>
+    您的購買已經完成。
+</p>
+<p class="text-danger">
+   若要查詢商品進度，請按 @Html.ActionLink("我的訂單", "MyOrder", "Order", new {@onclick="ClearCart()"})，或者按 @Html.ActionLink("這裡", "Index", "Home", new { @onclick = "ClearCart()" }) 回到首頁。
+</p>
+
+<script>
+ function ClearCart() {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("ClearCart","Cart")',
+                data: {}
+                })
+                .done(function (msg) {
+                //把回傳的頁面填入li #Cart
+                $("li#Cart").html(msg);
+                });
+ }
+    </script>

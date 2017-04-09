@@ -1,0 +1,41 @@
+﻿@using PagedList
+@using PagedList.Mvc
+@*指定model的資料型態為ProductCategoryViewModel的IPagedList*@
+@model IPagedList<ShoppingWeb.Models.Order>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                購買會員編號
+            </th>
+            <th>
+                收貨人姓名
+            </th>
+            <th>
+                收貨人電話
+            </th>
+            <th>
+                收貨人地址
+            </th>
+
+        </tr>
+    </thead>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+
+            <td> @Html.DisplayFor(modelItem => item.UserId)</td>
+            <td>@Html.DisplayFor(modelItem => item.RecieverName)</td>
+            <td>@Html.DisplayFor(modelItem => item.RecieverPhone)</td>
+            <td>@Html.DisplayFor(modelItem => item.RecieverAddress)</td>
+            <td>
+                @Html.ActionLink("商品明細", "MyOrderDetails", new { id = item.Id }, new { @class = "btn btn-default" })
+            </td>
+        </tr>
+    }
+
+
+</table>
+@Html.PagedListPager((IPagedList)this.Model, page => Url.Action("MyOrder", new { page }), PagedListRenderOptions.ClassicPlusFirstAndLast)

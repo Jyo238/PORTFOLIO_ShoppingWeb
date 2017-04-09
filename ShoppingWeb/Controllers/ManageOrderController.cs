@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using PagedList;
+using PagedList.Mvc;
 
 namespace ShoppingWeb.Controllers
 {
@@ -11,14 +13,14 @@ namespace ShoppingWeb.Controllers
     public class ManageOrderController : Controller
     {
         // GET: ManageOrder
-        public ActionResult Index()
+        public ActionResult Index(int page = 1 , int pagesize = 10)
         {
             //ViewBag.ResultMessage = TempData["ResultMessage"];
            // ViewBag.DeleteMessage = TempData["DeleteMessage"];
             using (CartsEntities db = new CartsEntities())
             { //抓取所有AspNetUsers中的資料，並且放入Models.ManageUser模型中
-                var result = (from s in db.OrderSet select s).ToList();
-                return View(result);
+                var result = (from s in db.OrderSet orderby s.Id select s);
+                return View(result.ToPagedList(page, pagesize));
             }
         }
 

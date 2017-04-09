@@ -1,4 +1,6 @@
-﻿@model IEnumerable<ShoppingWeb.Models.Order>
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model IPagedList<ShoppingWeb.Models.Order>
 
 @{
     ViewBag.Title = "Index";
@@ -46,6 +48,7 @@
         </tr>
 
     }
-
+  
 
 </table>
+@Html.PagedListPager((IPagedList)this.Model, page => Url.Action("Index", new { page }), PagedListRenderOptions.ClassicPlusFirstAndLast)

@@ -1,10 +1,15 @@
 ﻿@*<!DOCTYPE html>
 <html>*@
 <head>
+
+
+
+
+
     @*<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">*@
-    <title>@ViewBag.Title - 我的 ASP.NET 應用程式</title>
+    <title>@ViewBag.Title</title>
 
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
@@ -42,6 +47,7 @@
        .done(function (msg) {
            //把回傳的頁面填入li #Cart
            $("li#Cart").html(msg);
+           window.location.reload();
        });
         }
 
@@ -116,8 +122,10 @@
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">網站管理<span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">
                                     <li>@Html.ActionLink("商品管理", "Index", "Product")</li>
+                                    <li>@Html.ActionLink("類別管理", "Index", "Category")</li>
                                     <li>@Html.ActionLink("會員管理", "Index", "ManageUser")</li>
                                     <li>@Html.ActionLink("訂單管理", "Index", "ManageOrder")</li>
+                                    
                                 </ul>
                             </li>                    
                     }                   
@@ -146,8 +154,9 @@
                 <div class="container">
                     <div class="text-left center-block">
                         <p class="txt-railway">- Portfolio by Jiun-You Guo -</p>
-                       <a href="https://www.facebook.com/JiunYu238"><i id="social-fb" class="fa fa-facebook-square fa-3x social"></i></a>
-                        <a href="mailto:a7032181@gmail.com"><i id="social-em" class="fa fa-envelope-square fa-3x social"></i></a>
+                        <p>本作品集所有圖片都採用 Creative Commons Zero (CC0) 授權，使用者能複製、修改、散佈、展示這些相片。</p>
+                       @*<a href="https://www.facebook.com/JiunYu238"><i id="social-fb" class="fa fa-facebook-square fa-3x social"></i></a>
+                        <a href="mailto:a7032181@gmail.com"><i id="social-em" class="fa fa-envelope-square fa-3x social"></i></a>*@
                     </div>
                     <hr>
                 </div>

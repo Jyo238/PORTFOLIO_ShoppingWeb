@@ -2,8 +2,22 @@
 
 @{
     ViewBag.Title = "錯誤";
+
 }
 
-<h1 class="text-danger">錯誤。</h1>
-<h2 class="text-danger">處理您的要求時發生錯誤。</h2>
+<div class="error">
+   
+    <h3 class="font-bold">Oops！網站好像出了點問題..</h3>
+    <div class="error-desc">
+       很抱歉，這個頁面可能找不到或者被刪除囉！<br />
+        試著重新整理或者按下回到首頁吧！<p></p>
+        若錯誤持續發生，請聯繫網站管理人員。
+        <div>
+            <a class=" login-detail-panel-button btn" href="@Url.Action("Index","Home")">
+                <i class="fa fa-arrow-left"></i>
+                回到首頁
+            </a>
+        </div>
+    </div>
+</div>
 

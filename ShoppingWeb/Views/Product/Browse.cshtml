@@ -29,7 +29,7 @@
                                 <p>售價：@Product.Price</p>
                                 <p>庫存：@Product.Quantity</p>
                                 <p>
-                                    <a onclick="AddToCart('@Product.Id')" href="javascript:void{0};" class="btn btn-primary" role="button">加入購物車</a>
+                                    <a onclick="AddToCart('@Product.Id')" href="javascript:void{0};" class="btn btn-success" role="button">加入購物車</a>
                                     <a href="@Url.Action("Detail", new { id = Product.Id })" class="btn btn-default" role="button">詳細資訊</a>
                                 </p>
                             </div>

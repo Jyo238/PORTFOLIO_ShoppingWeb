@@ -12,24 +12,27 @@ namespace ShoppingWeb.Models
         {
             [ScaffoldColumn(false)]
             public int Id { get; set; }
+
             [Display(Name="產品名稱")]
             [Required]
-            [StringLength(50)]
+            [StringLength(50)]         
             public string Name { get; set; }
              [Display(Name = "描述")]
              [Required]
+             [DataType(DataType.MultilineText)]
             public string Description { get; set; }
              [Display(Name = "類別")]
              [Required]
             public int CategoryId { get; set; }           
              [Display(Name = "價格")]
              [Required]
-             [Range(0, 10000, ErrorMessage = "{0}必須介於{1}到{2}之間")]
+             [Range(0, 1000000, ErrorMessage = "{0}必須介於{1}到{2}之間")]
+             [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:#######}")]
             public decimal Price { get; set; }
              [Display(Name = "上傳日期")]
              [Required]
              [DataType(DataType.DateTime)]
-             [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy/MM/dd HH:mm:ss}")] //日期格式化
+             [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy/MM/dd}")] //日期格式化
             public System.DateTime PublishDate { get; set; }
              [Display(Name = "狀態")]
              [Required]
@@ -47,6 +50,7 @@ namespace ShoppingWeb.Models
 
         }
         public virtual Category Category { get; set; }
+
 
     }
 }

@@ -41,14 +41,14 @@
         { 
             <tr>
                 <td><img src="@pd.DefaultImgURL" width="50" height="50" /></td>
-                <td>@pd.Name</td>
-                <td>@pd.Price</td>
-                <td>@pd.Quantity</td>
-                <td>@pd.Amount</td>
+                <td>@Html.DisplayFor(model =>pd.Name)</td>
+                <td>@Html.DisplayFor(model => pd.Price)</td>
+                <td>@Html.DisplayFor(model => pd.Quantity)</td>
+                <td>@Html.DisplayFor(model => pd.Amount)</td>
             </tr>
-        
+
         }
-        <tr><td colspan="3">總計</td><td>@cart.TotoalAmount</td></tr>
+        <tr><td colspan="3">總計</td><td>@Html.DisplayFor(model => cart.TotoalAmount)</td></tr>
     </tbody>
 
 
@@ -90,7 +90,8 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="確定購買" class="btn btn-default" />
+                @*@Html.ActionLink("確定購買", "ThanksForBuy", null, new { @class = "btn btn-default", type = "submit" })*@
+                <input type="submit" value="確定購買" class="btn btn-default" onclick="@Url.Action("ThanksForBuy")"/>
             </div>
         </div>
     </div>

@@ -9,11 +9,13 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using ShoppingWeb.Models;
+using System.Drawing;
+using System.IO;
 
 namespace ShoppingWeb.Controllers
 {
     [Authorize]
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
@@ -147,12 +149,73 @@ namespace ShoppingWeb.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterViewModel model)
+        public async Task<ActionResult> Register(RegisterViewModel model, HttpPostedFileBase photoFile)
         {
-            if (ModelState.IsValid)
+            
+            var user = new ApplicationUser { UserName = model.Email, Email = model.Email, ImgUrl = model.ImgUrl, Name = model.Name };
+            var result = await UserManager.CreateAsync(user, model.Password);
+        //上傳大頭照
+            using (Models.UserEntities db = new Models.UserEntities())
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email,ImgUrl=model.ImgUrl,Name=model.Name };
-                var result = await UserManager.CreateAsync(user, model.Password);
+                var Idresult = (from s in db.AspNetUsers where s.Email == model.Email select s).FirstOrDefault();
+                if (Idresult != default(Models.AspNetUsers))
+                {
+                    var UserId = Idresult.Id;
+
+                    var fileName = "photo.jpg";
+                    //路徑
+                    var path = Path.Combine(Server.MapPath("~/FileUploads/" + UserId));
+                    //路徑加檔案名
+                    var pathName = Path.Combine(Server.MapPath("~/FileUploads/" + UserId), fileName);
+
+                    if (photoFile != null)
+                    {
+                        if (!isPicture(photoFile.FileName))
+                        {
+                            TempData["ErrorMessage"] = "您所上傳的檔案類型並不是圖片";
+                           
+                            return RedirectToAction("Register");
+                        }
+
+                        if (IsImage(photoFile) == null)
+                        {
+                            TempData["ErrorMessage"] = "您所上傳的檔案內容並不是圖片";
+                          
+                            return RedirectToAction("Register");
+                        }
+                        if (photoFile.ContentLength > 0 ) 
+                        {
+                            //資料夾不存在的話創一個
+                            if (!Directory.Exists(path))
+                            {
+                                Directory.CreateDirectory(path);
+                            }
+                            //有此檔名的話把他刪了
+                            if (System.IO.File.Exists(pathName))
+                            {
+                                System.IO.File.Delete(pathName);
+                            }
+                            Image photo = Image.FromStream(photoFile.InputStream);
+                            photo.Save(pathName, System.Drawing.Imaging.ImageFormat.Jpeg);
+                        }
+                        Idresult.ImgUrl = "~/FileUploads/" + UserId + "/photo.jpg";
+                    }
+                        //沒上傳大頭照的話就給他一張預設的大頭照
+                    else
+                    {
+                        Idresult.ImgUrl = "~/FileUploads/NoPhoto/no-photo.jpg";
+                    }
+                    db.SaveChanges();
+
+                }
+
+
+              
+
+
+            }
+
+              
                 if (result.Succeeded)
                 {
                 //這裡我讓他在註冊的第一個帳號為Admin
@@ -168,9 +231,6 @@ namespace ShoppingWeb.Controllers
                 //    //將使用者加入該角色
                 //    await UserManager.AddToRoleAsync(user.Id, roleName);
 
-                    
-
-
 
 
                     //await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);                  
@@ -182,7 +242,7 @@ namespace ShoppingWeb.Controllers
                     //return RedirectToAction("Index", "Home");
                     var code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking this link: <a href=\"" + callbackUrl + "\">link</a>");
+                    await UserManager.SendEmailAsync(user.Id, "確認您的帳戶", "請按一下此連結確認您的帳戶 " + callbackUrl);
                     ViewBag.Link = callbackUrl;
                     return View("DisplayEmail");
 
@@ -190,7 +250,7 @@ namespace ShoppingWeb.Controllers
 
                 }
                 AddErrors(result);
-            }
+            
 
             // 如果執行到這裡，發生某項失敗，則重新顯示表單
             return View(model);

@@ -12,11 +12,12 @@
 <h2>商品列表</h2>
 <tr>
     <td>
-        @Html.ActionLink("新增商品", "Create",null,null, new { @class = "btn btn-default" })
+        @Html.ActionLink("新增商品", "Create",null,null,new{@class = "btn btn-success"})
+        <p>
     </td>
-    <td>
+    @*<td>
         @Html.ActionLink("類別管理", "Index", "Category",null, new { @class = "btn btn-default" })
-    </td>
+    </td>*@
     
     
 </tr>
@@ -74,6 +75,7 @@
                 庫存
             </td>
             <td>類別</td>
+            <td>留言</td>
         </tr>
     </thead>
     <tbody>
@@ -91,13 +93,14 @@
                     }                   
                 </td>
                 <td><img src="@pd.DefaultImageURL" width = "50" height = "50" /></td>
-                <td>@pd.Id</td>
-                <td>@pd.Name</td>
-                <td>@pd.Description</td>
-                <td>@String.Format("{0:yyyy\\/MM\\/dd}", pd.PublishDate)</td>
-                <td>@pd.Price</td>
-                <td>@pd.Quantity</td>
-                <td>@pd.CategoryName</td>
+                <td>@Html.DisplayFor(model => pd.Id)</td>
+                <td>@Html.DisplayFor(model => pd.Name)</td>
+                <td>@Html.DisplayFor(model => pd.Description)</td>
+                <td>@Html.DisplayFor(model => pd.PublishDate)</td>
+                <td>@Html.DisplayFor(model => pd.Price)</td>
+                <td>@Html.DisplayFor(model => pd.Quantity)</td>
+                <td>@Html.DisplayFor(model => pd.CategoryName)</td>
+                <td>@Html.ActionLink("留言管理", "Comments", new { Id = pd.Id }, new { @class = "btn btn-default" })</td>
             </tr>      
     }
              

@@ -141,7 +141,7 @@ namespace ShoppingWeb.Controllers
             var path = Path.Combine(Server.MapPath("~/FileUploads/" + postback.Id));
             //路徑加檔案名
             var pathName = Path.Combine(Server.MapPath("~/FileUploads/" + postback.Id), fileName);
-
+            var Mb = photoFile.ContentLength / 1000 / 1000;
             using (Models.UserEntities db = new Models.UserEntities())
             {
                 TempData["id"] = postback.Id;
@@ -159,7 +159,7 @@ namespace ShoppingWeb.Controllers
                         TempData["ErrorMessage"] = "您所上傳的檔案內容並不是圖片";
                         return RedirectToAction("Edit");
                     }
-                    if (photoFile.ContentLength > 0)
+                    if (photoFile.ContentLength > 0 && Mb < 4)
                     {
                         //資料夾不存在的話創一個
                         if (!Directory.Exists(path))
@@ -175,6 +175,11 @@ namespace ShoppingWeb.Controllers
                         Image photo = Image.FromStream(photoFile.InputStream);
                         photo.Save(pathName, System.Drawing.Imaging.ImageFormat.Jpeg);
                         //photo.Save(@"D:\Newproject\ASP_Identity\ASP_Identity\FileUploads\" + id + @"\photo.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
+                    }
+                    else
+                    {
+                        TempData["ErrorMessage"] = "檔案大小不得超過4MB";
+                        return RedirectToAction("Edit");
                     }
                 }
                 var result = (from s in db.AspNetUsers where s.Id == postback.Id select s).FirstOrDefault();

@@ -1,0 +1,106 @@
+﻿@{
+    //取得當前購物內容
+    var CurrentCart = ShoppingWeb.Models.Operation.GetCurrentCart();
+}
+
+
+
+    @*<a id="CartDropDown" class="dropdown-toggle" data-toggle="dropdown">
+        @String.Format("共{0}元 ({1})", CurrentCart.TotoalAmount, CurrentCart.Count)
+        <span class="caret"></span>
+    </a>*@
+    @*<ul class="dropdown-menu" role="menu">*@
+
+    <a id="CartDropDown" class="dropdown-toggle" data-toggle="dropdown"> <span class="glyphicon glyphicon-shopping-cart"></span>@String.Format("共{0}元 ({1})", CurrentCart.TotoalAmount, CurrentCart.Count)<span class="caret"></span></a>
+        <span class="glyphicon glyphicon-shopping-cart"></span>
+    <ul class="dropdown-menu" role="menu">
+        @if (CurrentCart.Count > 0)
+        {
+
+            foreach (var cartitem in CurrentCart)
+            {
+                <li>
+                    <span class="item">
+                        <span class="item-left">
+
+                            <img src="@Url.Content(cartitem.DefaultImgURL)" alt="" width="50" height="50" />
+                            <span class="item-info">
+                                <span>@cartitem.Name</span><br />
+                                <span>@Math.Round(cartitem.Price,0) 元 X @cartitem.Quantity</span>
+                            </span>
+                        </span>
+                        <span class="item-right">
+                            <button class="btn btn-xs btn-danger pull-right" onclick="RemoveFromCart('@cartitem.Id')">x</button>
+                        </span>
+                    </span>
+                </li>
+
+
+                @*<li class="col-xs-12"></li>
+                    <li><span class="col-xs-10">@cartitem.Name @cartitem.Price 元 X @cartitem.Quantity</span></li>
+                    <li><span class="btn btn-danger col-xs-2" onclick="RemoveFromCart('@cartitem.Id')">X</span></li>*@
+
+            }
+            <li class="divider"></li>
+            <li><a class="text-center" href="@Url.Action("Index", "Order", new { })">結帳囉</a></li>
+            
+
+            @*<li class="divider"></li>
+                <li><a class="btn btn-success text-center col-xs-5" href="@Url.Action("Index", "Order", new { })">結帳囉</a></li>
+                <li><a class="btn btn-danger text-center col-xs-5" onclick="ClearCart()">清空</a></li>*@
+
+        }
+        else
+        {
+            <li><a class="btn btn-default text-center" href="#">購物車內無商品</a></li>
+        }
+    </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+        @*
+            <a id="CartDropDown" class="dropdown-toggle" data-toggle="dropdown">
+                @String.Format("共{0}元 ({1})", CurrentCart.TotoalAmount, CurrentCart.Count)
+                <span class="caret"></span>
+            </a>
+
+            <ul class="dropdown-menu" role="menu" aria-labelledby="CartDropDown">
+
+
+                @if (CurrentCart.Count > 0)
+                {
+
+                    foreach (var cartitem in CurrentCart)
+                    {
+
+
+                        <li class="col-xs-12"></li>
+                        <li><span class="col-xs-10">@cartitem.Name @cartitem.Price 元 X @cartitem.Quantity</span></li>
+                        <li><span class="btn btn-danger col-xs-2" onclick="RemoveFromCart('@cartitem.Id')">X</span></li>
+
+                    }
+
+                    <li class="divider"></li>
+                    <li><a class="btn btn-success text-center col-xs-5" href="@Url.Action("Index", "Order", new { })">結帳囉</a></li>
+                    <li><a class="btn btn-danger text-center col-xs-5" onclick="ClearCart()">清空</a></li>
+                }
+                else
+                {
+                    <li><a class="btn btn-default text-center" href="#">購物車內無商品</a></li>
+                }
+
+
+
+            </ul>
+
+        *@
+

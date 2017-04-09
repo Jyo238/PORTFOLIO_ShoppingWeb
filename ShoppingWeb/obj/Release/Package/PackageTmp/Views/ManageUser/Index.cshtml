@@ -1,0 +1,92 @@
+﻿@using PagedList
+@using PagedList.Mvc
+@*指定model的資料型態為ProductCategoryViewModel的IPagedList*@
+@model IPagedList<ShoppingWeb.Models.ManageUser>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>網站會員管理</h2>
+
+@if (ViewBag != null)
+{ 
+    @Html.Label("info", (string)ViewBag.ResultMessage, new { @class = "text-info" })
+}
+<div>
+
+    @using (Html.BeginForm("Index", "ManageUser"))
+    {
+        <div class="form-group">
+            @Html.TextBox("q", null, new { @class = "form-control", placeholder = "Search" })
+            <button type="submit" class="btn btn-default">搜尋</button>
+        </div>
+    }
+
+</div>
+<table class="table">
+<tr>
+    <th>
+        暱稱
+    </th>
+    <th>
+       Email
+    </th>
+    <th>
+        大頭貼
+    </th>
+    <th>操作</th>
+</tr>
+
+@foreach (var item in Model)
+{
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.NickName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Email)
+        </td>
+
+        <td>
+
+            @* 預防快取，所以後方加入時間參數 *@
+            <img src="@Url.Content("~/FileUploads/" + @item.Id + "/photo.jpg" + "?" + DateTime.Now.ToString("yyyyMMddhhmmss"))" width="250" height="250" id="Avator"/>
+        </td>
+        
+        <td>
+            @Html.ActionLink("編輯", "Edit", new { id = item.Id }, new { @class = "btn btn-default" })
+
+            @using (@Html.BeginForm("Delete", "ManageUser", FormMethod.Post, new { onsubmit = "return runScript();" }))
+            {     
+                @Html.Hidden("Id", item.Id)
+                <input type="submit" value="刪除" class="btn btn-default" />
+            }
+
+
+        </td>
+
+
+
+    </tr>
+}
+
+</table>
+
+@Html.PagedListPager((IPagedList)this.Model, page => Url.Action("Index", new { page }), PagedListRenderOptions.ClassicPlusFirstAndLast)
+
+@section scripts
+{
+    <script>
+        function runScript() {
+            if (confirm("你確定要刪除嗎？")) {
+                return true;
+            }
+            else {
+                return false;
+            }
+
+        }
+    </script>
+}

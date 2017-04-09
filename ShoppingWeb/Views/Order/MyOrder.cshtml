@@ -1,4 +1,7 @@
-﻿@model IEnumerable<ShoppingWeb.Models.Order>
+﻿@using PagedList
+@using PagedList.Mvc
+@*指定model的資料型態為ProductCategoryViewModel的IPagedList*@
+@model IPagedList<ShoppingWeb.Models.Order>
 
 <table class="table">
     <thead>
@@ -28,12 +31,11 @@
             <td>@Html.DisplayFor(modelItem => item.RecieverPhone)</td>
             <td>@Html.DisplayFor(modelItem => item.RecieverAddress)</td>
             <td>
-                @Html.ActionLink("商品明細", "MyOrderDetails", new { id = item.Id }
-             , new { @class = "btn btn-default" })
+                @Html.ActionLink("商品明細", "MyOrderDetails", new { id = item.Id }, new { @class = "btn btn-default" })
             </td>
         </tr>
-
     }
 
 
 </table>
+@Html.PagedListPager((IPagedList)this.Model, page => Url.Action("MyOrder", new { page }), PagedListRenderOptions.ClassicPlusFirstAndLast)

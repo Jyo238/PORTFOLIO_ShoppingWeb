@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="CartsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="CategorySet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="OrderDetailSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="OrderId" Type="int" Nullable="false" />
+    <Property Name="Price" Type="decimal" Precision="28" Scale="3" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="Quantity" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="OrderSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserId" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="RecieverName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="RecieverPhone" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="RecieverAddress" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ProductCommets">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserId" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Content" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="CreateDate" Type="datetime" Nullable="false" />
+    <Property Name="ProductId" Type="int" Nullable="false" />
+    <Property Name="Stars" Type="int" Nullable="false" />
+    <Property Name="ImgUrl" Type="nvarchar(max)" StoreGeneratedPattern="None" />
+  </EntityType>
+  <EntityType Name="ProductSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="CategoryId" Type="int" Nullable="false" />
+    <Property Name="Price" Type="decimal" Precision="28" Scale="3" Nullable="false" />
+    <Property Name="PublishDate" Type="datetime" Nullable="false" />
+    <Property Name="Status" Type="bit" Nullable="false" />
+    <Property Name="DefaultImageId" Type="bigint" />
+    <Property Name="Quantity" Type="int" Nullable="false" />
+    <Property Name="DefaultImageURL" Type="nvarchar(max)" />
+  </EntityType>
+  <Association Name="FK_OrderOrderDetail">
+    <End Role="OrderSet" Type="Self.OrderSet" Multiplicity="1" />
+    <End Role="OrderDetailSet" Type="Self.OrderDetailSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="OrderSet">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="OrderDetailSet">
+        <PropertyRef Name="OrderId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="CartsModelStoreContainer">
+    <EntitySet Name="CategorySet" EntityType="Self.CategorySet" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="OrderDetailSet" EntityType="Self.OrderDetailSet" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="OrderSet" EntityType="Self.OrderSet" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ProductCommets" EntityType="Self.ProductCommets" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ProductSet" EntityType="Self.ProductSet" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_OrderOrderDetail" Association="Self.FK_OrderOrderDetail">
+      <End Role="OrderSet" EntitySet="OrderSet" />
+      <End Role="OrderDetailSet" EntitySet="OrderDetailSet" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

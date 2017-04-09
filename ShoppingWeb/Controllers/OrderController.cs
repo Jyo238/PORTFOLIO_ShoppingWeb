@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using ShoppingWeb.Models;
+using PagedList;
+using PagedList.Mvc;
 
 namespace ShoppingWeb.Controllers
 {
@@ -50,23 +52,25 @@ namespace ShoppingWeb.Controllers
                     db.SaveChanges();
                 }
                 TempData["ResultMessage"] = String.Format("{0}你好，您的訂單已訂購成功", postback.RecieverName);
-                return RedirectToAction("Index","Home");
+                return View("ThanksForBuy");
             }
 
 
             return View();
         }
 
+        public ActionResult ThanksForBuy()
+        {
+            return View();
+        }
 
-
-
-        public ActionResult MyOrder()
+        public ActionResult MyOrder(int page = 1, int pagesize = 10)
         {
             var UserId = HttpContext.User.Identity.Name;
             using (CartsEntities db = new CartsEntities())
             {
-                var result = (from s in db.OrderSet where s.UserId == UserId select s).ToList();
-                return View(result);
+                var result = (from s in db.OrderSet orderby s.Id where s.UserId == UserId select s);
+                return View(result.ToPagedList(page, pagesize));
                 
             }
             

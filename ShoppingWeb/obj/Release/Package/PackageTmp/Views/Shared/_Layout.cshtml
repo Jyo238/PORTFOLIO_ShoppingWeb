@@ -1,0 +1,163 @@
+﻿@*<!DOCTYPE html>
+<html>*@
+<head>
+    @*<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">*@
+    <title>@ViewBag.Title - 我的 ASP.NET 應用程式</title>
+
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+    @*購物車JS*@
+    <script type="text/javascript">
+        //網頁載入時須完成的Function
+        $(document).ready(function () {
+            console.log("Ready");
+        });
+
+        //加入編號productID的商品進購物車
+        function AddToCart(productId) {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("AddToCart","Cart")',
+                data: { id: productId }
+            })
+                .done(function (msg) {
+                    //把回傳的頁面填入li #Cart
+                    $("li#Cart").html(msg);
+                });
+        }
+
+
+        function RemoveFromCart(productId) {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("RemoveFromCart","Cart")',
+                data: { id: productId }
+            })
+       .done(function (msg) {
+           //把回傳的頁面填入li #Cart
+           $("li#Cart").html(msg);
+           window.location.reload();
+       });
+        }
+
+        function ClearCart() {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("ClearCart","Cart")',
+                data: {}
+            })
+                .done(function (msg) {
+                    //把回傳的頁面填入li #Cart
+                    $("li#Cart").html(msg);
+                });
+        }
+
+        (function ($) {
+            $(document).ready(function () {
+                $('ul.dropdown-menu [data-toggle=dropdown]').on('click', function (event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    $(this).parent().siblings().removeClass('open');
+                    $(this).parent().toggleClass('open');
+                });
+            });
+        })(jQuery);
+
+        $(document).ready(function () {
+            $(".dropdown").hover(
+                function () {
+                    $('.dropdown-menu', this).not('.in .dropdown-menu').stop(true, true).slideDown("400");
+                    $(this).toggleClass('open');
+                },
+                function () {
+                    $('.dropdown-menu', this).not('.in .dropdown-menu').stop(true, true).slideUp("400");
+                    $(this).toggleClass('open');
+                }
+            );
+        });
+
+    </script>
+</head>
+<body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("生活用品店", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+ 
+                    @*<li>@Html.ActionLink("連絡方式", "Contact", "Home")</li>*@
+                    <li>@{Html.RenderAction("_CategoryMenu", "Category");}</li>
+
+                        @if (Request.IsAuthenticated && User.IsInRole("Admin"))
+                        {
+                            
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">權限管理<span class="caret"></span></a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li>@Html.ActionLink("所有權限管理", "Index", "RolesAdmin")</li>
+                                    <li>@Html.ActionLink("會員權限管理", "Index", "UsersAdmin")</li>
+                                </ul>
+                            </li>
+                            
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">網站管理<span class="caret"></span></a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li>@Html.ActionLink("商品管理", "Index", "Product")</li>
+                                    <li>@Html.ActionLink("類別管理", "Index", "Category")</li>
+                                    <li>@Html.ActionLink("會員管理", "Index", "ManageUser")</li>
+                                    <li>@Html.ActionLink("訂單管理", "Index", "ManageOrder")</li>
+                                    
+                                </ul>
+                            </li>                    
+                    }                   
+                    <li id="Cart" class="dropdown">@Html.Partial("_CartPartial")</li>                                                                                      
+                    <li>@Html.ActionLink("關於我", "About", "Home")</li>                                                                        
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    @Html.Partial("_LoginPartial")
+                </ul>
+                            
+            </div>   
+        </div>       
+    </div>
+
+
+
+        <div class="container body-content">
+            @RenderBody()
+            <hr />
+            <footer>
+                <!-- Social Footer, Colour Matching Icons -->
+                <!-- Include Font Awesome Stylesheet in Header -->
+                <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+                <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-MfvZlkHCEqatNoGiOXveE8FIwMzZg4W85qfrfIFBfYc= sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+                <!-- // -->
+                <div class="container">
+                    <div class="text-left center-block">
+                        <p class="txt-railway">- Portfolio by Jiun-You Guo -</p>
+                       <a href="https://www.facebook.com/JiunYu238"><i id="social-fb" class="fa fa-facebook-square fa-3x social"></i></a>
+                        <a href="mailto:a7032181@gmail.com"><i id="social-em" class="fa fa-envelope-square fa-3x social"></i></a>
+                    </div>
+                    <hr>
+                </div>
+                <br />
+            </footer>
+        </div>
+
+
+</body>
+@*</html>*@

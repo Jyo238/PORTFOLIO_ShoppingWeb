@@ -40,7 +40,7 @@
                                     <input type="submit" value="搜尋" class="btn btn-default" />
                                         </form>
                                 }
-                                @*<h6><span></span> <a href="#menu-toggle" class="btn btn-primary btn-lg" id="menu-toggle">開始血拚</a></h6>*@
+
                               
                             </div>
 
@@ -64,12 +64,14 @@
                                         <a href="@Url.Action("Detail", new { id = Product.Id })"><img class="ProductImg" src="@Product.DefaultImageURL" alt="商品圖片" width="250" height="250" /></a>
                                     </div>
                                     <div class="col-lg-12 nopad">
-                                        <h3>&nbsp;&nbsp;@Product.Name</h3>
-                                        <p>描述：@Product.Description</p>
-                                        <p>售價：@Product.Price</p>
-                                        <p>庫存：@Product.Quantity</p>
+
+                                        <h3>&nbsp;&nbsp;@Html.DisplayFor(model =>Product.Name)</h3>
+                                        <p>描述：@Html.DisplayFor(model => Product.Description)</p>
+                                        <p>售價：@Html.DisplayFor(model =>Product.Price)</p>
+                                        <p>庫存：@Html.DisplayFor(model => Product.Quantity)</p>
                                         <p>
-                                            <a onclick="AddToCart('@Product.Id')" href="javascript: void(0)" class="btn btn-primary" role="button">加入購物車</a>
+
+                                            <a onclick="AddToCart('@Product.Id')" href="javascript: void(0)" class="btn btn-success" role="button">加入購物車</a>
                                             <a href="@Url.Action("Detail", new { id = Product.Id })" class="btn btn-default" role="button">詳細資訊</a>
                                         </p>
                                     </div>
@@ -77,7 +79,7 @@
                             </div>
 
                         }
-  
+
                     </div>
                 @Html.PagedListPager((IPagedList)this.Model, page => Url.Action("Index", new { page }), PagedListRenderOptions.ClassicPlusFirstAndLast)
                 </div>

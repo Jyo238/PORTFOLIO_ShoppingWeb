@@ -56,7 +56,8 @@ namespace ShoppingWeb.Controllers
                 {
                     //db.Product和db.Category做inner join，select new Models.ViewModel.ProductCategoryViewModel
                  var result = (from s in db.ProductSet
-                              join o in db.CategorySet on s.CategoryId equals o.Id
+                               join o in db.CategorySet on s.CategoryId equals o.Id
+                               orderby s.Id
                               where s.Name.Contains(q)
                               select new Models.ViewModel.ProductCategoryViewModel
                               {
@@ -83,10 +84,6 @@ namespace ShoppingWeb.Controllers
 
         public ActionResult Browse(int Category,int page = 1,int pagesize= 6)
         {
-            //List實體化
-            //List<Models.Product> result = new List<Models.Product>();
-            //接收轉至的成功訊息
-            //ViewBag.ResultMessage = TempData["ResultMessage"];
 
             using (Models.CartsEntities db = new Models.CartsEntities())
             {
@@ -109,9 +106,6 @@ namespace ShoppingWeb.Controllers
             ViewBag.CategoryId = new SelectList(CN, "Id", "Name");
                 }
            
-
-
-
             return View();
         }
         //只有使用Post方法才可進入
@@ -142,6 +136,9 @@ namespace ShoppingWeb.Controllers
             return View(postback);
                  
         }
+
+     
+
 
 
         public ActionResult Edit(int Id)
@@ -184,7 +181,7 @@ namespace ShoppingWeb.Controllers
                 var result = (from s in db.ProductSet where s.Id == postback.Id select s).FirstOrDefault();
                 //儲存使用者變更資料
                 result.Name = postback.Name;
-                result.Price =postback.Price;
+                result.Price = Math.Round(postback.Price,0);
                 result.PublishDate=postback.PublishDate;
                 result.Quantity=postback.Quantity;
                 result.Status=postback.Status;
@@ -210,8 +207,6 @@ namespace ShoppingWeb.Controllers
 
         }
 
-
-    
 
 
         [HttpPost, ActionName("Delete")] //刪除方法為POST
@@ -241,8 +236,56 @@ namespace ShoppingWeb.Controllers
             
         }
 
+        //留言管理
+        public ActionResult Comments(int Id, int page = 1, int pagesize = 6)
+        {
+            ViewBag.ResultMessage = TempData["deleteMessage"];
+            using (Models.CartsEntities db = new Models.CartsEntities())
+            {
+
+                var result = (from s in db.ProductCommets
+                              where s.ProductId == Id
+                              orderby s.Id
+                              select s);
+
+                return View(result.ToPagedList(page, pagesize));
+            }
 
         }
+
+
+        [HttpPost] //刪除方法為POST
+        public ActionResult DeleteComments(int CommentsId)
+        {
+
+            using (CartsEntities db = new CartsEntities())
+            {
+                //ProductSet內的Id = 輸入的Id 的值
+                var result = (from s in db.ProductCommets
+                              where s.Id == CommentsId
+                              select s).FirstOrDefault();
+
+                if (result != default(ProductCommet)) //如果Result有抓到資料
+                {
+                    db.ProductCommets.Remove(result);
+                    db.SaveChanges();
+
+
+                    TempData["deleteMessage"] = String.Format("留言已刪除");
+                    return RedirectToAction("Comments", new { Id = result.ProductId}); //回傳Result的View
+                }
+                else
+                {
+                    TempData["deleteMessage"] = "資料有誤，無法刪除，請重新操作";
+                    return RedirectToAction("Comments", new { Id = result.ProductId});
+                }
+            }
+
+
+        }
+
+
+    }
             
 }
     

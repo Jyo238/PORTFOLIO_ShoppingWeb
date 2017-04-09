@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using ShoppingWeb.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace ShoppingWeb.Models
 {
@@ -19,6 +20,7 @@ namespace ShoppingWeb.Models
         private List<CartItem> cartItems;
 
         //商品總價
+       [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:C2}")]
         public decimal TotoalAmount
         {
             get 

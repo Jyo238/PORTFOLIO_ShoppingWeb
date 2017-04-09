@@ -71,7 +71,8 @@ namespace ShoppingWeb.Models
         [Display(Name = "暱稱")]
         public string Name { get; set; }
 
-
+        [Required]
+        [Display(Name = "大頭照")]  
         public string ImgUrl { get; set; }
 
         [Required]
