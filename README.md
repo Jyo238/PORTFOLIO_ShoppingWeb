@@ -10,5 +10,5 @@
 <li>利用Chrome擴充功能提升效率-使用關鍵字查詢Youtube的相關結果
 </ul>
 <hr>
-	![]http://imgur.com/a/lDvke)
+	[Imgur](http://i.imgur.com/EyJ20zg.jpg)
 ## 作品介紹
