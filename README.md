@@ -1,7 +1,9 @@
 # PORTFOLIO_ShoppingWeb
 Asp.net MVC(C#)作品-生活用品店
 <blockquote>這是我使用Asp.net MVC(C#)所完成的第一個作品，是一個生活用品的線上購物網站，網站雖然介面簡單但功能齊全，有購物車、商品評論機制、會員及權限管理系統、後台管理系統、Bootstrap套版設計等等</blockquote>
-	
+
+因此作品圖較多，所以有做了一個[影片快速導覽](https://www.youtube.com/watch?v=iSoixWDq7G0&index=1&list=PLXiacTbBcws-Gp4FirdWXIe5bhpnTgPyv)供參閱。
+
 ## 作品介紹
 **1. 首頁及Layout部分:**<br>
 首頁部分為商品的陳列，而每件商品都有加到購物車及點擊查看詳細資訊的按鈕。
