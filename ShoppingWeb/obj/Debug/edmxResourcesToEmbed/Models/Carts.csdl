@@ -70,7 +70,7 @@
     <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
     <Property Name="ProductId" Type="Int32" Nullable="false" />
     <Property Name="Stars" Type="Int32" Nullable="false" />
-    <Property Name="ImgUrl" Type="String" Nullable="false" />
+    <Property Name="ImgUrl" Type="String" Unicode="true" FixedLength="false" MaxLength="Max" />
   </EntityType>
   <EntityType Name="Category">
     <Key>

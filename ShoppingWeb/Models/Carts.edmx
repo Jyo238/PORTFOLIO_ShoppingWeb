@@ -42,7 +42,7 @@
           <Property Name="CreateDate" Type="datetime" Nullable="false" />
           <Property Name="ProductId" Type="int" Nullable="false" />
           <Property Name="Stars" Type="int" Nullable="false" />
-          <Property Name="ImgUrl" Type="nvarchar(max)" StoreGeneratedPattern="None" />
+          <Property Name="ImgUrl" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="ProductSet">
           <Key>
@@ -156,7 +156,7 @@
           <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="ProductId" Type="Int32" Nullable="false" />
           <Property Name="Stars" Type="Int32" Nullable="false" />
-          <Property Name="ImgUrl" Type="String" Nullable="false" />
+          <Property Name="ImgUrl" Type="String" Unicode="true" FixedLength="false" MaxLength="Max" />
         </EntityType>
         <EntityType Name="Category">
           <Key>
