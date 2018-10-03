@@ -48,30 +48,32 @@ namespace ShoppingWeb.Controllers
 
         public ActionResult Detail(int id, int page = 1, int pagesize = 10)
         {
-            ProductProductCommetViewModel Viewmodel = new ProductProductCommetViewModel();
-
+           // ProductProductCommetViewModel Viewmodel = new ProductProductCommetViewModel();
+           // 
             using (CartsEntities db = new CartsEntities())
             {
                 var result = (from s in db.ProductSet where s.Id == id select s).FirstOrDefault();
                 if (result == default(Product))
                 {
-
                     return RedirectToAction("Index");
                 }
                 else
                 {
                     var commentlist = (from s in db.ProductCommets orderby s.Id where s.ProductId == id select s);
-                   Viewmodel.Products = result;
-                   Viewmodel.ProductCommet = commentlist.ToPagedList(page, pagesize);
-                   Viewmodel.starrating = StarGet(id);
-                   Viewmodel.staritem = StarC(id);
-                   Viewmodel.starmax = 5;
-
+                    ProductProductCommetViewModel Viewmodel = new ProductProductCommetViewModel()
+                    {
+                        Products = result,
+                        ProductCommet = commentlist.ToPagedList(page, pagesize),
+                        starrating = StarGet(id),
+                        staritem = StarC(id),
+                        starmax = 5
+                    };
+                    
                     return View(Viewmodel);
                 }
             }
         }
-
+        
         [HttpPost]
         [Authorize]
         public ActionResult AddComment(int id, string Content, int rating)
@@ -84,7 +86,10 @@ namespace ShoppingWeb.Controllers
             {
                 var NickName = (from s in Userdb.AspNetUsers where s.UserName == UserId select s.Name).FirstOrDefault();
                 var ImgUrl = (from s in Userdb.AspNetUsers where s.UserName == UserId select s.ImgUrl).FirstOrDefault();
-
+                rating=(rating <=0) ? 1 
+                    :(rating >= 5) ? 5 
+                    : rating;
+                
 
                 var comment = new ProductCommet()
                 {
@@ -111,7 +116,6 @@ namespace ShoppingWeb.Controllers
         /*
                 public ActionResult Search(string q)
                 {
-
                     //List實體化
                     List<Models.Product> result = new List<Models.Product>();
 

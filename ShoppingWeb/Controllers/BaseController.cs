@@ -38,6 +38,11 @@ namespace ShoppingWeb.Controllers
         }
 
 
+        /// <summary>
+        /// 平均分數吧?忘了
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
        protected static decimal StarGet(int id)
         {
             decimal starsum = 0.0m;
@@ -58,6 +63,7 @@ namespace ShoppingWeb.Controllers
 
             }
         }
+
 
       protected static List<int> StarC(int id)
         {

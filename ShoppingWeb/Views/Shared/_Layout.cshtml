@@ -33,6 +33,7 @@
             })
                 .done(function (msg) {
                     //把回傳的頁面填入li #Cart
+                   
                     $("li#Cart").html(msg);
                 });
         }
@@ -79,9 +80,14 @@
                 function () {
                     $('.dropdown-menu', this).not('.in .dropdown-menu').stop(true, true).slideDown("400");
                     $(this).toggleClass('open');
+
+                    $('.dropdown-menu-shop', this).not('.in .dropdown-menu-shop').stop(true, true).slideDown("400");
+                    $(this).toggleClass('open');
                 },
                 function () {
                     $('.dropdown-menu', this).not('.in .dropdown-menu').stop(true, true).slideUp("400");
+                    $(this).toggleClass('open');
+                    $('.dropdown-menu-shop', this).not('.in .dropdown-menu-shop').stop(true, true).slideUp("400");
                     $(this).toggleClass('open');
                 }
             );
@@ -140,7 +146,7 @@
         </div>       
     </div>
 
-
+    
 
         <div class="container body-content">
             @RenderBody()
@@ -148,8 +154,9 @@
             <footer>
                 <!-- Social Footer, Colour Matching Icons -->
                 <!-- Include Font Awesome Stylesheet in Header -->
-                <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
-                <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-MfvZlkHCEqatNoGiOXveE8FIwMzZg4W85qfrfIFBfYc= sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+                <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+                <link href="~/bootstrap-3.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+                @*<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-MfvZlkHCEqatNoGiOXveE8FIwMzZg4W85qfrfIFBfYc= sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">*@
                 <!-- // -->
                 <div class="container">
                     <div class="text-left center-block">

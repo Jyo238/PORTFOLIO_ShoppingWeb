@@ -30,12 +30,12 @@
                                 <p>庫存：@Product.Quantity</p>
                                 <p>
                                     <a onclick="AddToCart('@Product.Id')" href="javascript:void{0};" class="btn btn-success" role="button">加入購物車</a>
-                                    <a href="@Url.Action("Detail", new { id = Product.Id })" class="btn btn-default" role="button">詳細資訊</a>
+                                    <a href="@Url.Action("Detail","Home", new { id = Product.Id })" class="btn btn-default" role="button">詳細資訊</a>
                                 </p>
                             </div>
                         </div>
                     </div>
-
+                    
                 }
             </div>
             @Html.PagedListPager((IPagedList)this.Model, page => Url.Action("Index", new { page }), PagedListRenderOptions.ClassicPlusFirstAndLast)
